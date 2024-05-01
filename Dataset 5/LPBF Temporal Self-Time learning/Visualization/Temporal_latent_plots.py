@@ -20,6 +20,59 @@ import itertools
 import seaborn as sns
 
 
+
+def latent_plots(folder_created,graph_name, epoch_length):
+
+    # folder_created = os.path.join('Figures/', graph_name)
+    # print(folder_created)
+    # try:
+    #     os.makedirs(folder_created, exist_ok=True)
+    #     print("Directory created....")
+    # except OSError as error:
+    #     print("Directory already exists....")
+
+    train_embeddings = folder_created+'/' + \
+        str(graph_name)+'_'+str(epoch_length)+'_embeddings' + '.npy'
+    train_labelsname = folder_created+'/'+str(graph_name)+'_'+str(epoch_length)+'_labels'+'.npy'
+
+    X_train = np.load(train_embeddings).astype(np.float64)
+    y_train = np.load(train_labelsname).astype(np.float64)
+
+    Featurespace = X_train
+    classspace = y_train
+
+    columns = np.atleast_2d(Featurespace).shape[1]
+    df2 = pd.DataFrame(classspace)
+    df2.columns = ['Categorical']
+
+    # df2=df2['Categorical'].replace(0,'LoF')
+    # df2 = pd.DataFrame(df2)
+    # df2=df2['Categorical'].replace(1,'Conduction mode')
+    # df2 = pd.DataFrame(df2)
+    # df2=df2['Categorical'].replace(2,'Keyhole')
+    # df2 = pd.DataFrame(df2)
+
+    print(columns)
+
+    for i in range(columns):
+        print(i)
+        Featurespace_1 = Featurespace.transpose()
+        data = (Featurespace_1[i])
+        data = data.astype(np.float64)
+        #data= abs(data)
+        df1 = pd.DataFrame(data)
+        df1.rename(columns={df1.columns[0]: "Feature"}, inplace=True)
+        df2.rename(columns={df2.columns[0]: "categorical"}, inplace=True)
+        data = pd.concat([df1, df2], axis=1)
+        minval = min(data.categorical.value_counts())
+
+        print(minval)
+        data = pd.concat([data[data.categorical == cat].head(minval)
+                         for cat in data.categorical.unique()])
+        distribution_plot(data, i, folder_created)
+
+    all_plot(X_train, y_train, folder_created)
+
 def plot_windows(epochs, window_size, path):
 
     plt.rcParams.update(plt.rcParamsDefault)
@@ -77,57 +130,6 @@ def distribution_plot(data, i, folder_created):
 # %%
 
 
-def latent_plots(graph_name, epoch_length):
-
-    folder_created = os.path.join('Figures/', graph_name)
-    print(folder_created)
-    try:
-        os.makedirs(folder_created, exist_ok=True)
-        print("Directory created....")
-    except OSError as error:
-        print("Directory already exists....")
-
-    train_embeddings = folder_created+'/' + \
-        str(graph_name)+'_'+str(epoch_length)+'_embeddings' + '.npy'
-    train_labelsname = folder_created+'/'+str(graph_name)+'_'+str(epoch_length)+'_labels'+'.npy'
-
-    X_train = np.load(train_embeddings).astype(np.float64)
-    y_train = np.load(train_labelsname).astype(np.float64)
-
-    Featurespace = X_train
-    classspace = y_train
-
-    columns = np.atleast_2d(Featurespace).shape[1]
-    df2 = pd.DataFrame(classspace)
-    df2.columns = ['Categorical']
-
-    # df2=df2['Categorical'].replace(0,'LoF')
-    # df2 = pd.DataFrame(df2)
-    # df2=df2['Categorical'].replace(1,'Conduction mode')
-    # df2 = pd.DataFrame(df2)
-    # df2=df2['Categorical'].replace(2,'Keyhole')
-    # df2 = pd.DataFrame(df2)
-
-    print(columns)
-
-    for i in range(columns):
-        print(i)
-        Featurespace_1 = Featurespace.transpose()
-        data = (Featurespace_1[i])
-        data = data.astype(np.float64)
-        #data= abs(data)
-        df1 = pd.DataFrame(data)
-        df1.rename(columns={df1.columns[0]: "Feature"}, inplace=True)
-        df2.rename(columns={df2.columns[0]: "categorical"}, inplace=True)
-        data = pd.concat([df1, df2], axis=1)
-        minval = min(data.categorical.value_counts())
-
-        print(minval)
-        data = pd.concat([data[data.categorical == cat].head(minval)
-                         for cat in data.categorical.unique()])
-        distribution_plot(data, i, folder_created)
-
-    all_plot(X_train, y_train, folder_created)
 
 
 def Cummulative_plots(Featurespace, classspace, i, ax):

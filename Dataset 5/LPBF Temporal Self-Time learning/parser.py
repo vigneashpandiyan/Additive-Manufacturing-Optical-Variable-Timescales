@@ -49,13 +49,13 @@ def parse_option():
 
     parser.add_argument('--batch_size', type=int, default=128,
                         help='batch_size')
-    parser.add_argument('--epochs', type=int, default=200,
+    parser.add_argument('--epochs', type=int, default=5,
                         help='number of training epochs')
 
     parser.add_argument('--bayesian_train_size', type=int, default=1,
                         help='bayesian_train_size')  # default training
 
-    parser.add_argument('--epochs_test', type=int, default=100,
+    parser.add_argument('--epochs_test', type=int, default=5,
                         help='number of test epochs')
 
     # parser.add_argument('--bayesian_size', type=int, default=1,

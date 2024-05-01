@@ -23,23 +23,15 @@ import os
 # %%
 
 
-def detect_limits(scores_normal, limits):
-    # find q1 and q3 values
-    normal_avg, normal_std = np.average(scores_normal), np.std(scores_normal)
-    Threshold0 = normal_avg - (normal_std * limits)
-    Threshold1 = normal_avg + (normal_std * limits)
-    return Threshold0, Threshold1
+def tsne_visualization_(X, Y, folder_created, filename, epoch_length):
 
-
-def tsne_visualization_(X, Y, filename, epoch_length):
-
-    folder_created = os.path.join('Figures/', filename)
-    print(folder_created)
-    try:
-        os.makedirs(folder_created, exist_ok=True)
-        print("Directory created....")
-    except OSError as error:
-        print("Directory already exists....")
+    # folder_created = os.path.join('Figures/', filename)
+    # print(folder_created)
+    # try:
+    #     os.makedirs(folder_created, exist_ok=True)
+    #     print("Directory created....")
+    # except OSError as error:
+    #     print("Directory already exists....")
 
     # no augmentations used for linear evaluation
 
@@ -69,6 +61,33 @@ def tsne_visualization_(X, Y, filename, epoch_length):
     np.save(Save_Label, Y)
 
     return X, Y, ax, fig, graph_name
+
+
+def TSNEplot_(output, group, graph_name1, graph_name2, graph_name3, Save, graph_title, limits, perplexity):
+
+    # array of latent space, features fed rowise
+
+    output = np.array(output)
+    group = np.array(group)
+
+    print('target shape: ', group.shape)
+    print('output shape: ', output.shape)
+    print('perplexity: ', perplexity)
+
+    group = np.ravel(group)
+    RS = np.random.seed(1974)
+    tsne = TSNE(n_components=3, random_state=RS, perplexity=perplexity)
+    tsne_fit = tsne.fit_transform(output)
+
+    np.save(Save, tsne_fit)
+
+    plot_2Dembeddings_(tsne_fit, group, graph_name1,
+                       graph_title, limits, xlim=None, ylim=None)
+    ax, fig = plot_3Dembeddings_(tsne_fit, group, graph_name2,
+                                 graph_title, limits, xlim=None, ylim=None)
+
+    return ax, fig, graph_name3
+
 
 
 def plot_2Dembeddings_(tsne_fit, group, graph_name1, graph_title, limits, xlim=None, ylim=None):
@@ -128,32 +147,12 @@ def plot_2Dembeddings_(tsne_fit, group, graph_name1, graph_title, limits, xlim=N
     plt.savefig(graph_name1, bbox_inches='tight', dpi=200)
     plt.show()
 
-
-def TSNEplot_(output, group, graph_name1, graph_name2, graph_name3, Save, graph_title, limits, perplexity):
-
-    # array of latent space, features fed rowise
-
-    output = np.array(output)
-    group = np.array(group)
-
-    print('target shape: ', group.shape)
-    print('output shape: ', output.shape)
-    print('perplexity: ', perplexity)
-
-    group = np.ravel(group)
-    RS = np.random.seed(1974)
-    tsne = TSNE(n_components=3, random_state=RS, perplexity=perplexity)
-    tsne_fit = tsne.fit_transform(output)
-
-    np.save(Save, tsne_fit)
-
-    plot_2Dembeddings_(tsne_fit, group, graph_name1,
-                       graph_title, limits, xlim=None, ylim=None)
-    ax, fig = plot_3Dembeddings_(tsne_fit, group, graph_name2,
-                                 graph_title, limits, xlim=None, ylim=None)
-
-    return ax, fig, graph_name3
-
+def detect_limits(scores_normal, limits):
+    # find q1 and q3 values
+    normal_avg, normal_std = np.average(scores_normal), np.std(scores_normal)
+    Threshold0 = normal_avg - (normal_std * limits)
+    Threshold1 = normal_avg + (normal_std * limits)
+    return Threshold0, Threshold1
 
 def plot_3Dembeddings_(tsne_fit, group, graph_name2, graph_title, limits, xlim=None, ylim=None):
 
@@ -193,9 +192,9 @@ def plot_3Dembeddings_(tsne_fit, group, graph_name2, graph_title, limits, xlim=N
     ax.view_init(elev=15, azim=125)  # 115
     ax.set_facecolor('white')
 
-    ax.w_xaxis.pane.fill = False
-    ax.w_yaxis.pane.fill = False
-    ax.w_zaxis.pane.fill = False
+    ax.xaxis.pane.fill = False
+    ax.yaxis.pane.fill = False
+    ax.zaxis.pane.fill = False
 
     ax.xaxis.set_pane_color((1.0, 1.0, 1.0, 0.0))
     ax.yaxis.set_pane_color((1.0, 1.0, 1.0, 0.0))

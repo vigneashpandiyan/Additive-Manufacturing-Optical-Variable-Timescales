@@ -22,15 +22,15 @@ import os
 # %%
 
 
-def tsne_visualization(x_train, y_train, x_val, y_val, x_test, y_test, ckpt, opt, filename, epoch_length):
+def tsne_visualization(x_train, y_train, x_val, y_val, x_test, y_test, ckpt, opt, folder_created,filename, epoch_length):
 
-    folder_created = os.path.join('Figures/', filename)
-    print(folder_created)
-    try:
-        os.makedirs(folder_created, exist_ok=True)
-        print("Directory created....")
-    except OSError as error:
-        print("Directory already exists....")
+    # folder_created = os.path.join('Figures/', filename)
+    # print(folder_created)
+    # try:
+    #     os.makedirs(folder_created, exist_ok=True)
+    #     print("Directory created....")
+    # except OSError as error:
+    #     print("Directory already exists....")
 
     # no augmentations used for linear evaluation
     transform_lineval = transforms.Compose([transforms.ToTensor()])
@@ -101,7 +101,6 @@ def tsne_visualization(x_train, y_train, x_val, y_val, x_test, y_test, ckpt, opt
     graph_name2 = folder_created+'/'+str(filename)+'_3D'+'_'+str(epoch_length)+'.png'
     graph_name3 = folder_created+'/'+str(filename)+'_3D'+'_'+str(epoch_length)+'.gif'
 
-    ax, fig, graph_name = TSNEplot(X, y, graph_name1, graph_name2,
-                                   graph_name3, str(filename), limits=2.6, perplexity=20)
+    ax, fig, graph_name = TSNEplot(X, y, graph_name1, graph_name2,  graph_name3, str(filename), epoch_length, limits=2.6, perplexity=20)
 
     return X, y, ax, fig, graph_name

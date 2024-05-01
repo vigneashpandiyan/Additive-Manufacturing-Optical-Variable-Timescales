@@ -18,9 +18,10 @@ from matplotlib.pyplot import cm
 from sklearn.manifold import TSNE
 np.random.seed(1974)
 plt.rcParams.update(plt.rcParamsDefault)
+ # marker= ["o","*",">","o","*",">"]
+ # color = [ '#dd221c', '#16e30b', 'blue','#fab6b6','#a6ffaa','#b6befa']
 
-
-def plot_2Dembeddings(tsne_fit, group, graph_name1, graph_title, limits, xlim=None, ylim=None):
+def plot_2Dembeddings(tsne_fit, group, graph_name1, graph_title,epoch_length, limits, xlim=None, ylim=None):
 
     x1 = tsne_fit[:, 0]
     x2 = tsne_fit[:, 1]
@@ -36,10 +37,6 @@ def plot_2Dembeddings(tsne_fit, group, graph_name1, graph_title, limits, xlim=No
     classes = np.unique(uniq)
     color = iter(cm.rainbow(np.linspace(0, 1, len(classes))))
     marker = itertools.cycle(('X', '+', '.', 'o', '*', '>', 'D'))
-
-    # marker= ["o","*",">","o","*",">"]
-
-    # color = [ '#dd221c', '#16e30b', 'blue','#fab6b6','#a6ffaa','#b6befa']
 
     plt.rcParams.update(plt.rcParamsDefault)
     fig = plt.figure(figsize=(9, 9), dpi=200)
@@ -64,6 +61,9 @@ def plot_2Dembeddings(tsne_fit, group, graph_name1, graph_title, limits, xlim=No
 
     plt.xlabel('Dimension 1', labelpad=15, fontsize=25)
     plt.ylabel('Dimension 2', labelpad=15, fontsize=25)
+    
+    graph_title = 'T-sne lower dimensional embeddings computed' + "\n" + \
+        'on window length of '+str(1000-epoch_length)+' data points'
 
     plt.title(graph_title, pad=15, fontsize=25)
     plt.legend()
@@ -75,7 +75,7 @@ def plot_2Dembeddings(tsne_fit, group, graph_name1, graph_title, limits, xlim=No
     plt.show()
 
 
-def TSNEplot(output, group, graph_name1, graph_name2, graph_name3, graph_title, limits, perplexity):
+def TSNEplot(output, group, graph_name1, graph_name2, graph_name3, graph_title,epoch_length, limits, perplexity):
 
     # array of latent space, features fed rowise
 
@@ -91,14 +91,14 @@ def TSNEplot(output, group, graph_name1, graph_name2, graph_name3, graph_title, 
     tsne = TSNE(n_components=3, random_state=RS, perplexity=perplexity)
     tsne_fit = tsne.fit_transform(output)
 
-    plot_2Dembeddings(tsne_fit, group, graph_name1, graph_title, limits, xlim=None, ylim=None)
+    plot_2Dembeddings(tsne_fit, group, graph_name1, graph_title,epoch_length, limits, xlim=None, ylim=None)
     ax, fig = plot_3Dembeddings(tsne_fit, group, graph_name2,
-                                graph_title, limits, xlim=None, ylim=None)
+                                graph_title,epoch_length, limits, xlim=None, ylim=None)
 
     return ax, fig, graph_name3
 
 
-def plot_3Dembeddings(tsne_fit, group, graph_name2, graph_title, limits, xlim=None, ylim=None):
+def plot_3Dembeddings(tsne_fit, group, graph_name2, graph_title,epoch_length, limits, xlim=None, ylim=None):
 
     x1 = tsne_fit[:, 0]
     x2 = tsne_fit[:, 1]
@@ -125,16 +125,16 @@ def plot_3Dembeddings(tsne_fit, group, graph_name2, graph_title, limits, xlim=No
     fig.set_facecolor('white')
 
     plt.rcParams["legend.markerscale"] = 2
-    plt.rc("font", size=25)
+    plt.rc("font", size=35)
 
     ax = plt.axes(projection='3d')
     ax.grid(False)
     ax.view_init(elev=15, azim=125)  # 115
     ax.set_facecolor('white')
 
-    ax.w_xaxis.pane.fill = False
-    ax.w_yaxis.pane.fill = False
-    ax.w_zaxis.pane.fill = False
+    ax.xaxis.pane.fill = False
+    ax.yaxis.pane.fill = False
+    ax.zaxis.pane.fill = False
 
     ax.xaxis.set_pane_color((1.0, 1.0, 1.0, 0.0))
     ax.yaxis.set_pane_color((1.0, 1.0, 1.0, 0.0))
@@ -171,10 +171,12 @@ def plot_3Dembeddings(tsne_fit, group, graph_name2, graph_title, limits, xlim=No
     plt.yticks(fontsize=20)
 
     ax.set_zlabel('Dimension 3', labelpad=10, fontsize=20)
-    ax.zaxis.set_tick_params(labelsize=20)
-    ax.dist = 11
-
-    plt.title(graph_title, fontsize=25)
+    ax.zaxis.set_tick_params(labelsize=25)
+    ax.dist = 20
+    graph_name = 'T-sne lower dimensional embeddings computed' + "\n" + \
+        'on window length of '+str(1000-epoch_length)+' data points'
+    
+    plt.title(graph_name, fontsize=30)
     plt.locator_params(nbins=6)
     plt.legend(loc='upper left', frameon=False)
     plt.savefig(graph_name2, bbox_inches='tight', dpi=200)

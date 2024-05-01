@@ -18,20 +18,19 @@ from Model.Network import TemporalCNN, Linear_
 from sklearn.metrics import confusion_matrix
 import matplotlib.pyplot as plt
 import seaborn as sns
-from blitz.modules import BayesianLinear, BayesianConv1d
 import os
 
 
-def Encoder_backbone_evaluation(x_train, y_train, x_val, y_val, x_test, y_test, nb_class, ckpt, opt, graph_name, epoch_length, ckpt_tosave=None):
+def Encoder_backbone_evaluation(x_train, y_train, x_val, y_val, x_test, y_test, nb_class, ckpt, opt, folder_created,graph_name, epoch_length, ckpt_tosave=None):
     # no augmentations used for linear evaluation
 
-    folder_created = os.path.join('Figures/', graph_name)
-    print(folder_created)
-    try:
-        os.makedirs(folder_created, exist_ok=True)
-        print("Directory created....")
-    except OSError as error:
-        print("Directory already exists....")
+    # folder_created = os.path.join('Figures/', graph_name)
+    # print(folder_created)
+    # try:
+    #     os.makedirs(folder_created, exist_ok=True)
+    #     print("Directory created....")
+    # except OSError as error:
+    #     print("Directory already exists....")
 
     transform_lineval = transforms.Compose([transforms.ToTensor()])
 

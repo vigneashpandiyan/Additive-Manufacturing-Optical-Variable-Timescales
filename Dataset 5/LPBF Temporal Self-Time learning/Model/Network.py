@@ -18,7 +18,6 @@ import torch.nn as nn
 import numpy as np
 import torch.nn.functional as F
 import sys
-from blitz.modules import BayesianLinear, BayesianConv1d
 from torch import nn
 sys.path.append("..")
 
