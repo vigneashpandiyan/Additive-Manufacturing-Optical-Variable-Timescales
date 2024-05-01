@@ -1,14 +1,15 @@
 # -*- coding: utf-8 -*-
 """
-Created on Wed Feb  7 21:57:22 2024
-
 @author: srpv
-contact: vigneashwara.solairajapandiyan@empa.ch
+contact: vigneashwara.solairajapandiyan@empa.ch,vigneashpandiyan@gmail.com
+
 The codes in this following script will be used for the publication of the following work
 "Pyrometry-based in-situ Layer Thickness Identification via Vector-length Aware Self-Supervised Learning"
+
 @any reuse of this code should be authorized by the code author
 """
-
+#%%
+#Libraries to import
 # %
 import numpy as np
 from matplotlib.pyplot import cm
@@ -18,7 +19,20 @@ import pandas as pd
 
 
 def plot_latent_2D(epoch_length, folder_created, filename):
-    'Call from main'
+    """
+    Plots the 2D latent space representation of the given features using t-SNE algorithm.
+    
+    Args:
+        epoch_length (int): The length of the epoch.
+        folder_created (str): The path of the folder where the embeddings and labels are stored.
+        filename (str): The name of the file.
+        
+    Returns:
+        tuple: A tuple containing the features and class labels.
+    """
+    
+
+    
 
     # for epoch_length in window_lengths:
 
@@ -88,26 +102,55 @@ def plot_latent_2D(epoch_length, folder_created, filename):
 
 
 def euclidean_distance(p1, p2):
+    """
+    Calculates the Euclidean distance between two points in n-dimensional space.
+
+    Parameters:
+        p1 (numpy.ndarray): The first point in n-dimensional space.
+        p2 (numpy.ndarray): The second point in n-dimensional space.
+
+    Returns:
+        float: The Euclidean distance between p1 and p2.
+    """
     return np.sqrt(np.sum((p1 - p2)**2))
 
 # Function to find the closest centroid for a given data point
 
 
 def find_closest_centroid(data_point, centroids):
+    """
+    Finds the closest centroid to a given data point.
+
+    Args:
+        data_point (numpy.ndarray): The data point for which the closest centroid needs to be found.
+        centroids (list): A list of centroids to compare the data point against.
+
+    Returns:
+        tuple: A tuple containing the index of the closest centroid, a list of indices sorted by the distance from the data point to each centroid, and a list of distances from the data point to each centroid.
+    """
     distances = [euclidean_distance(data_point, centroid)
                  for centroid in centroids]
 
-    # print(distances)
     closest_centroid_index = np.argmin(distances)
     indices_sorted_by_min_value = sorted(
         range(len(distances)), key=lambda i: distances[i])
 
-    # print(indices_sorted_by_min_value)
     return closest_centroid_index, indices_sorted_by_min_value, distances
 
 
 def plot_centroids(features, class_labels, group):
+    """
+    Plots the centroids for each class based on the given features and class labels.
 
+    Args:
+        features (numpy.ndarray): The feature vectors for each data point.
+        class_labels (numpy.ndarray): The class labels for each data point.
+        group (list): The list of class labels to plot centroids for.
+
+    Returns:
+        numpy.ndarray: The computed centroids for each class.
+
+    """
     centroids = np.zeros((len(features[0]), len(group)))
     j = 0
     # Compute centroid for each class
@@ -122,47 +165,23 @@ def plot_centroids(features, class_labels, group):
         centroids[j] = class_centroid
         j = j+1
 
-    # print("Centroids for each class:")
-    # print(centroids)
 
-    color = iter(cm.rainbow(np.linspace(0, 1, len(group))))
-    marker = itertools.cycle(('X', '*', 'o'))
-    labels = ['10 um', '20 um', '30 um', '40 um',
-              '50 um', '60 um', '70 um', '80 um', '90 um', '100 um', '110 um']
-
-    plt.rcParams.update(plt.rcParamsDefault)
-    fig = plt.figure(figsize=(6, 6), dpi=200)
-    fig.set_facecolor('white')
-    plt.rcParams["legend.markerscale"] = 3
-    plt.rc("font", size=23)
-
-    i = 0
-    for j in group:
-
-        c = next(color)
-        m = next(marker)
-        a = centroids[0][i]
-        b = centroids[i][1]
-        plt.plot(a, b, color=c, label=labels[j],
-                 marker=m, linestyle='', ms=25)
-        i = i+1
-
-    plt.xlabel('Dimension 1', labelpad=15, fontsize=25)
-    plt.ylabel('Dimension 2', labelpad=15, fontsize=25)
-
-    plt.title('Centroids computation', pad=15, fontsize=25)
-    # plt.legend()
-    plt.locator_params(nbins=6)
-    plt.xticks(fontsize=25)
-    plt.yticks(fontsize=25)
-    plt.legend(bbox_to_anchor=(1, 1), frameon=False, markerscale=1.2)
-    plt.savefig('Centroid.png', bbox_inches='tight', dpi=200)
-    plt.show()
 
     return centroids
 
 
 def increment_counter(lst, value, my_counter):
+    """
+    Increments the counter if the last element of the list is equal to the given value.
+
+    Args:
+        lst (list): The list to check the last element.
+        value: The value to compare with the last element of the list.
+        my_counter: The counter to increment.
+
+    Returns:
+        int: The updated counter value.
+    """
 
     if lst[-1] == value:
         my_counter += 1
@@ -173,6 +192,20 @@ def increment_counter(lst, value, my_counter):
 
 
 def binary_cluster(group, value, data, centroids, epoch_length, window_size):
+    """
+    Perform binary clustering on the given group of data.
+
+    Args:
+        group (list): List of categories to perform clustering on.
+        value (int): Value to increment the counter by.
+        data (pandas.DataFrame): Input data for clustering.
+        centroids (list): List of centroids for clustering.
+        epoch_length (int): Length of each epoch.
+        window_size (int): Size of the window.
+
+    Returns:
+        None
+    """
 
     my_counter = 0
     # global my_counter

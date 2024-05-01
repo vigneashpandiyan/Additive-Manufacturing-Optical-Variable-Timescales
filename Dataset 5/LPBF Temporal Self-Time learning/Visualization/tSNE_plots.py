@@ -1,13 +1,15 @@
 # -*- coding: utf-8 -*-
 """
-Created on Wed Feb  7 21:57:22 2024
-
 @author: srpv
-contact: vigneashwara.solairajapandiyan@empa.ch
+contact: vigneashwara.solairajapandiyan@empa.ch,vigneashpandiyan@gmail.com
+
 The codes in this following script will be used for the publication of the following work
 "Pyrometry-based in-situ Layer Thickness Identification via Vector-length Aware Self-Supervised Learning"
+
 @any reuse of this code should be authorized by the code author
 """
+#%%
+#Libraries to import
 
 import itertools
 from mpl_toolkits.mplot3d import Axes3D
@@ -22,6 +24,24 @@ plt.rcParams.update(plt.rcParamsDefault)
  # color = [ '#dd221c', '#16e30b', 'blue','#fab6b6','#a6ffaa','#b6befa']
 
 def plot_2Dembeddings(tsne_fit, group, graph_name1, graph_title,epoch_length, limits, xlim=None, ylim=None):
+
+    """
+    Plots 2D embeddings using t-SNE algorithm.
+
+    Args:
+        tsne_fit (numpy.ndarray): The t-SNE fit array with shape (n_samples, 2).
+        group (numpy.ndarray): The group labels for each sample with shape (n_samples,).
+        graph_name1 (str): The name of the output graph file.
+        graph_title (str): The title of the graph.
+        epoch_length (int): The length of the epoch.
+        limits (float): The limit for detecting the range of the data.
+        xlim (tuple, optional): The x-axis limits of the plot. Defaults to None.
+        ylim (tuple, optional): The y-axis limits of the plot. Defaults to None.
+
+    Returns:
+        None
+    """
+    
 
     x1 = tsne_fit[:, 0]
     x2 = tsne_fit[:, 1]
@@ -75,10 +95,26 @@ def plot_2Dembeddings(tsne_fit, group, graph_name1, graph_title,epoch_length, li
     plt.show()
 
 
-def TSNEplot(output, group, graph_name1, graph_name2, graph_name3, graph_title,epoch_length, limits, perplexity):
+def TSNEplot(output, group, graph_name1, graph_name2, graph_name3, graph_title, epoch_length, limits, perplexity):
+    """
+    This function generates t-SNE plots based on the given input data.
 
-    # array of latent space, features fed rowise
+    Parameters:
+    output (numpy.ndarray): The output data for t-SNE plot.
+    group (numpy.ndarray): The group data for t-SNE plot.
+    graph_name1 (str): The name of the first graph.
+    graph_name2 (str): The name of the second graph.
+    graph_name3 (str): The name of the third graph.
+    graph_title (str): The title of the graph.
+    epoch_length (int): The length of the epoch.
+    limits (int): The limits for the graph.
+    perplexity (float): The perplexity value for t-SNE.
 
+    Returns:
+    ax (matplotlib.axes.Axes): The axes object of the third graph.
+    fig (matplotlib.figure.Figure): The figure object of the third graph.
+    graph_name3 (str): The name of the third graph.
+    """
     output = np.array(output)
     group = np.array(group)
 
@@ -98,7 +134,24 @@ def TSNEplot(output, group, graph_name1, graph_name2, graph_name3, graph_title,e
     return ax, fig, graph_name3
 
 
-def plot_3Dembeddings(tsne_fit, group, graph_name2, graph_title,epoch_length, limits, xlim=None, ylim=None):
+def plot_3Dembeddings(tsne_fit, group, graph_name2, graph_title, epoch_length, limits, xlim=None, ylim=None):
+    """
+    Plots 3D embeddings using t-SNE algorithm.
+
+    Args:
+        tsne_fit (numpy.ndarray): The t-SNE fit array with shape (n_samples, 3).
+        group (numpy.ndarray): The group labels for each sample with shape (n_samples,).
+        graph_name2 (str): The name of the output graph file.
+        graph_title (str): The title of the graph.
+        epoch_length (int): The length of the epoch.
+        limits (int): The limit value.
+        xlim (tuple, optional): The x-axis limits. Defaults to None.
+        ylim (tuple, optional): The y-axis limits. Defaults to None.
+
+    Returns:
+        ax (matplotlib.axes._subplots.Axes3DSubplot): The 3D axes object.
+        fig (matplotlib.figure.Figure): The figure object.
+    """
 
     x1 = tsne_fit[:, 0]
     x2 = tsne_fit[:, 1]
@@ -184,9 +237,19 @@ def plot_3Dembeddings(tsne_fit, group, graph_name2, graph_title,epoch_length, li
 
     return ax, fig
 
-
 # %%
 def detect_limits(scores_normal, limits):
+    """
+    Detects the lower and upper limits based on the given scores and limits.
+
+    Args:
+        scores_normal (numpy.ndarray): An array of scores.
+        limits (float): The number of standard deviations to consider for the limits.
+
+    Returns:
+        tuple: A tuple containing the lower limit (Threshold0) and upper limit (Threshold1).
+    """
+
     # find q1 and q3 values
     normal_avg, normal_std = np.average(scores_normal), np.std(scores_normal)
     Threshold0 = normal_avg - (normal_std * limits)

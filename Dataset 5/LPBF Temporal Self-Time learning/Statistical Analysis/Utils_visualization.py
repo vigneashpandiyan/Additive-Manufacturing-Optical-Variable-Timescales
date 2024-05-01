@@ -1,15 +1,15 @@
 # -*- coding: utf-8 -*-
 """
-Created on Wed Feb  7 21:57:22 2024
-
 @author: srpv
-contact: vigneashwara.solairajapandiyan@empa.ch
+contact: vigneashwara.solairajapandiyan@empa.ch,vigneashpandiyan@gmail.com
+
 The codes in this following script will be used for the publication of the following work
 "Pyrometry-based in-situ Layer Thickness Identification via Vector-length Aware Self-Supervised Learning"
+
 @any reuse of this code should be authorized by the code author
 """
-# %%
-# Libraries to import
+#%%
+#Libraries to import
 
 import numpy as np
 import pandas as pd
@@ -22,7 +22,10 @@ from matplotlib import colors
 
 
 def kdeplot(data, feature, path_, label_custom):
-
+    # Function to generate a KDE plot for a given feature in the data
+    # Input: data (pandas DataFrame), feature (str), path_ (str), label_custom (list)
+    # Output: fig (matplotlib Figure)
+    
     fig = plt.subplots(figsize=(9, 5), dpi=800)
     new_columns = list(data.columns)
     new_columns[-1] = 'target'
@@ -54,7 +57,18 @@ def kdeplot(data, feature, path_, label_custom):
 
 
 def hist(data, feature, path_, label_custom):
-
+    """
+    This function generates a histogram plot for a given feature in the dataset.
+    
+    Parameters:
+        data (pandas.DataFrame): The input dataset.
+        feature (str): The name of the feature for which the histogram is to be generated.
+        path_ (str): The path where the histogram plot will be saved.
+        label_custom (list): A list of custom labels for the histogram plot.
+        
+    Returns:
+        matplotlib.figure.Figure: The generated histogram plot.
+    """
     fig = plt.subplots(figsize=(9, 5), dpi=800)
     new_columns = list(data.columns)
     new_columns[-1] = 'target'
@@ -84,6 +98,17 @@ def hist(data, feature, path_, label_custom):
 
 
 def violinplot(data, feature, path_):
+    """
+    Generate a violin plot to visualize the distribution of a feature across different target classes.
+
+    Parameters:
+    data (DataFrame): The input data containing the feature and target columns.
+    feature (str): The name of the feature to be visualized.
+    path_ (str): The path to save the generated plot.
+
+    Returns:
+    fig: The generated violin plot figure.
+    """
     df = data
     new_columns = list(data.columns)
     new_columns[-1] = 'target'
@@ -111,6 +136,17 @@ def violinplot(data, feature, path_):
 
 
 def boxplot(data, feature, path_):
+    """
+    Generate a boxplot visualization for a given feature in the dataset.
+
+    Parameters:
+    data (DataFrame): The input dataset.
+    feature (str): The name of the feature to visualize.
+    path_ (str): The path to save the generated plot.
+
+    Returns:
+    fig: The generated boxplot figure.
+    """
     df = data
     new_columns = list(data.columns)
     new_columns[-1] = 'target'
@@ -135,6 +171,18 @@ def boxplot(data, feature, path_):
 
 
 def Histplotsplit(data, feature, path_):
+    """
+    Generate histogram and kernel density estimation plots for each target class in the given data.
+
+    Args:
+        data (pandas.DataFrame): The input data containing the target variable and feature.
+        feature (str): The name of the feature to be plotted.
+        path_ (str): The path to save the generated plot.
+
+    Returns:
+        matplotlib.figure.Figure: The generated figure object.
+
+    """
     df = data
 
     new_columns = list(data.columns)
@@ -173,6 +221,18 @@ def Histplotsplit(data, feature, path_):
 
 
 def barplot(data, feature, path_):
+    """
+    Generate a bar plot for a given feature in the dataset.
+
+    Parameters:
+    data (DataFrame): The input dataset.
+    feature (str): The name of the feature to plot.
+    path_ (str): The path to save the generated plot.
+
+    Returns:
+    None
+    """
+    
     df = data
     new_columns = list(data.columns)
     new_columns[-1] = 'target'
@@ -196,9 +256,19 @@ def barplot(data, feature, path_):
     plt.show()
 
 
-# %%https://github.com/sbebo/joypy/blob/master/Joyplot.ipynb
-
 def ridgeplot(data, feature, path_):
+    """
+    Generate a ridge plot visualization.
+
+    Args:
+        data (pandas.DataFrame): The input data.
+        feature (str): The name of the feature to be visualized.
+        path_ (str): The path to save the generated plot.
+
+    Returns:
+        matplotlib.figure.Figure: The generated figure object.
+    """
+
     df = data
 
     new_columns = list(data.columns)
@@ -223,6 +293,18 @@ def ridgeplot(data, feature, path_):
 
 
 def kdeplotsplit(data, feature, path_):
+    """
+    Generate KDE plots for each class in the given dataset.
+
+    Args:
+        data (pandas.DataFrame): The input dataset.
+        feature (str): The name of the feature to plot.
+        path_ (str): The path to save the generated plot.
+
+    Returns:
+        matplotlib.figure.Figure: The generated figure object.
+    """
+
     df = data
 
     new_columns = list(data.columns)

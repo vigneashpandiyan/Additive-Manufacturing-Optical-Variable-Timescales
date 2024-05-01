@@ -1,14 +1,16 @@
 # -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 """
-Created on Wed Feb  7 21:57:22 2024
-
 @author: srpv
-contact: vigneashwara.solairajapandiyan@empa.ch
+contact: vigneashwara.solairajapandiyan@empa.ch,vigneashpandiyan@gmail.com
+
 The codes in this following script will be used for the publication of the following work
 "Pyrometry-based in-situ Layer Thickness Identification via Vector-length Aware Self-Supervised Learning"
+
 @any reuse of this code should be authorized by the code author
 """
-
+#%%
+#Libraries to import
 from torch.nn import Parameter
 from prettytable import PrettyTable
 import matplotlib.pyplot as plt
@@ -21,33 +23,44 @@ import sys
 from torch import nn
 sys.path.append("..")
 
-# -*- coding: utf-8 -*-
-
-
-sys.path.append("..")
-
+#%%
 
 class Linear_(nn.Module):
-    def __init__(self, feature, nb_class,):
+    """
+    This class represents a linear neural network module.
+
+    Args:
+        feature (int): The number of input features.
+        nb_class (int): The number of output classes.
+
+    Attributes:
+        feature (int): The number of input features.
+        nb_class (int): The number of output classes.
+        fc1 (nn.Linear): The first linear layer.
+        fc2 (nn.Linear): The second linear layer.
+
+    """
+
+    def __init__(self, feature, nb_class):
         super(Linear_, self).__init__()
         self.feature = feature
-        # self.dropout = 0.1
         self.nb_class = nb_class
 
         self.fc1 = nn.Linear(self.feature, 32)
-        self.fc2 = nn.Linear(32,  self.nb_class)
-
-        # self.conv1 = nn.Sequential(
-        #     nn.ReLU(),
-        #     nn.Dropout(self.dropout),
-        # )
+        self.fc2 = nn.Linear(32, self.nb_class)
 
     def forward(self, x):
+        """
+        Performs a forward pass through the linear neural network.
 
+        Args:
+            x (torch.Tensor): The input tensor.
+
+        Returns:
+            torch.Tensor: The output tensor.
+
+        """
         x = F.relu(self.fc1(x))
-        # print("Xshape", x.shape)
-        # x = self.conv1(x)
-        # print("Xshape", x.shape)
         x = self.fc2(x)
 
         return x
@@ -56,37 +69,6 @@ class Linear_(nn.Module):
 # CausalCNNEncoder
 # CausalCNN
 # CausalConvolutionBlock
-
-
-class PrintLayer(torch.nn.Module):
-    def __init__(self):
-        super(PrintLayer, self).__init__()
-
-    def forward(self, x):
-        # Do your print / debug stuff here
-        # print("Mainblock..", x.shape)
-        return x
-
-
-class PrintLayer_2(torch.nn.Module):
-    def __init__(self):
-        super(PrintLayer_2, self).__init__()
-
-    def forward(self, x):
-        # Do your print / debug stuff here
-        # print("CausalConvolutionBlock_conv", x.shape)
-        return x
-
-
-class PrintLayer_3(torch.nn.Module):
-    def __init__(self):
-        super(PrintLayer_3, self).__init__()
-
-    def forward(self, x):
-        # Do your print / debug stuff here
-        # print("CausalConvolutionBlock_chomp", x.shape)
-        return x
-
 
 class Chomp1d(torch.nn.Module):
     """
@@ -291,8 +273,7 @@ class TemporalCNN(torch.nn.Module):
         # linear = torch.nn.Linear(reduced_size, out_channels)
 
         self.network = torch.nn.Sequential(
-            causal_cnn, PrintLayer(), reduce_size, PrintLayer(), squeeze, PrintLayer(),
-        )
+            causal_cnn, reduce_size, squeeze   )
 
     def get_params(self, deep=True):
         return {
@@ -309,7 +290,5 @@ class TemporalCNN(torch.nn.Module):
         }
 
     def forward(self, x):
-        # print("CausalCNNEncoder")
         x = x.view(x.shape[0], 1, -1)
-        # print("xshapebefore the network", x.shape)
         return self.network(x)

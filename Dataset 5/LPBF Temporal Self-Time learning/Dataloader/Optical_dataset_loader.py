@@ -1,21 +1,31 @@
 # -*- coding: utf-8 -*-
 """
-Created on Wed Feb  7 21:57:22 2024
-
 @author: srpv
-contact: vigneashwara.solairajapandiyan@empa.ch
+contact: vigneashwara.solairajapandiyan@empa.ch,vigneashpandiyan@gmail.com
+
 The codes in this following script will be used for the publication of the following work
 "Pyrometry-based in-situ Layer Thickness Identification via Vector-length Aware Self-Supervised Learning"
+
 @any reuse of this code should be authorized by the code author
 """
-
+#%%
+#Libraries to import
 import numpy as np
 import pandas as pd
 
 # %%
-
-
+# Normalize the data to [-1, 1]
 def normalize_to_minus_one(array):
+    """
+    Normalize an array to the range of -1 to 1.
+
+    Args:
+        array (numpy.ndarray): The input array to be normalized.
+
+    Returns:
+        numpy.ndarray: The normalized array.
+
+    """
     min_val = np.min(array)
     max_val = np.max(array)
     normalized_array = [((x - min_val) / (max_val - min_val)) * 2 - 1 for x in array]
@@ -25,6 +35,26 @@ def normalize_to_minus_one(array):
 
 
 def load_LPBF(path, dataset_name, dataset_label):
+    """
+    Load LPBF dataset from the given path.
+
+    Args:
+        path (str): The path to the dataset.
+        dataset_name (str): The name of the raw data file.
+        dataset_label (str): The name of the class labels file.
+
+    Returns:
+        tuple: A tuple containing the following elements:
+            - x_train (ndarray): The training data.
+            - y_train (ndarray): The training labels.
+            - x_val (ndarray): The validation data.
+            - y_val (ndarray): The validation labels.
+            - x_test (ndarray): The test data.
+            - y_test (ndarray): The test labels.
+            - nb_class (ndarray): The unique classes in the dataset.
+    """
+    # Function code here
+
     ##################
     # load raw data
     ##################

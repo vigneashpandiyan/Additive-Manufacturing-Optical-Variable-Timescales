@@ -1,14 +1,15 @@
 # -*- coding: utf-8 -*-
 """
-Created on Wed Feb  7 21:57:22 2024
-
 @author: srpv
-contact: vigneashwara.solairajapandiyan@empa.ch
+contact: vigneashwara.solairajapandiyan@empa.ch,vigneashpandiyan@gmail.com
+
 The codes in this following script will be used for the publication of the following work
 "Pyrometry-based in-situ Layer Thickness Identification via Vector-length Aware Self-Supervised Learning"
+
 @any reuse of this code should be authorized by the code author
 """
-
+#%%
+#Libraries to import
 from sklearn.manifold import TSNE
 from matplotlib.pyplot import cm
 import matplotlib.pyplot as plt
@@ -24,17 +25,20 @@ import os
 
 
 def tsne_visualization_(X, Y, folder_created, filename, epoch_length):
-
-    # folder_created = os.path.join('Figures/', filename)
-    # print(folder_created)
-    # try:
-    #     os.makedirs(folder_created, exist_ok=True)
-    #     print("Directory created....")
-    # except OSError as error:
-    #     print("Directory already exists....")
-
-    # no augmentations used for linear evaluation
-
+    """
+    Visualizes the t-SNE lower dimensional embeddings computed on a window length of data points.
+    
+    Args:
+        X (numpy.ndarray): The input data points.
+        Y (numpy.ndarray): The labels corresponding to the input data points.
+        folder_created (str): The path of the folder where the visualization files will be saved.
+        filename (str): The name of the file for the visualization.
+        epoch_length (int): The length of the epoch.
+        
+    Returns:
+        tuple: A tuple containing the input data points (X), labels (Y), the axis object (ax), the figure object (fig),
+               and the name of the graph file (graph_name).
+    """
     graph_name1 = str(filename)+'_2D'+'_'+str(epoch_length)+'.png'
     graph_name1 = os.path.join(folder_created, graph_name1)
 
@@ -64,7 +68,26 @@ def tsne_visualization_(X, Y, folder_created, filename, epoch_length):
 
 
 def TSNEplot_(output, group, graph_name1, graph_name2, graph_name3, Save, graph_title, limits, perplexity):
+    """
+    Plots t-SNE embeddings in 2D and 3D.
 
+    Args:
+        output (numpy.ndarray): Array of latent space, features fed row-wise.
+        group (numpy.ndarray): Array of target values.
+        graph_name1 (str): Name of the 2D graph file to be saved.
+        graph_name2 (str): Name of the 3D graph file to be saved.
+        graph_name3 (str): Name of the graph file to be returned.
+        Save (str): Path to save the t-SNE embeddings.
+        graph_title (str): Title of the graph.
+        limits (list): List of limits for the graph axes.
+        perplexity (int): Perplexity value for t-SNE.
+
+    Returns:
+        ax (matplotlib.axes.Axes): Axes object of the 3D graph.
+        fig (matplotlib.figure.Figure): Figure object of the 3D graph.
+        graph_name3 (str): Name of the graph file.
+
+    """
     # array of latent space, features fed rowise
 
     output = np.array(output)
@@ -91,7 +114,22 @@ def TSNEplot_(output, group, graph_name1, graph_name2, graph_name3, Save, graph_
 
 
 def plot_2Dembeddings_(tsne_fit, group, graph_name1, graph_title, limits, xlim=None, ylim=None):
+    """
+    Plots 2D embeddings using t-SNE algorithm.
 
+    Args:
+        tsne_fit (numpy.ndarray): The t-SNE fit array.
+        group (numpy.ndarray): The group array.
+        graph_name1 (str): The name of the output graph file.
+        graph_title (str): The title of the graph.
+        limits (int): The limit value for the graph.
+        xlim (tuple, optional): The x-axis limits. Defaults to None.
+        ylim (tuple, optional): The y-axis limits. Defaults to None.
+
+    Returns:
+        None
+    """
+  
     x1 = tsne_fit[:, 0]
     x2 = tsne_fit[:, 1]
 
@@ -148,6 +186,17 @@ def plot_2Dembeddings_(tsne_fit, group, graph_name1, graph_title, limits, xlim=N
     plt.show()
 
 def detect_limits(scores_normal, limits):
+    """
+    Detects the lower and upper limits based on the given scores and limits.
+
+    Args:
+        scores_normal (numpy.ndarray): An array of scores.
+        limits (float): The number of standard deviations to consider for calculating the limits.
+
+    Returns:
+        tuple: A tuple containing the lower limit (Threshold0) and upper limit (Threshold1).
+    """
+    
     # find q1 and q3 values
     normal_avg, normal_std = np.average(scores_normal), np.std(scores_normal)
     Threshold0 = normal_avg - (normal_std * limits)
@@ -155,6 +204,23 @@ def detect_limits(scores_normal, limits):
     return Threshold0, Threshold1
 
 def plot_3Dembeddings_(tsne_fit, group, graph_name2, graph_title, limits, xlim=None, ylim=None):
+    """
+    Plots 3D embeddings using t-SNE algorithm.
+
+    Args:
+        tsne_fit (numpy.ndarray): The t-SNE fit array with shape (n_samples, 3).
+        group (numpy.ndarray): The group labels for each sample with shape (n_samples,).
+        graph_name2 (str): The name of the output graph file.
+        graph_title (str): The title of the graph.
+        limits (int): The limit value for detecting outliers.
+        xlim (tuple, optional): The x-axis limits of the plot. Defaults to None.
+        ylim (tuple, optional): The y-axis limits of the plot. Defaults to None.
+
+    Returns:
+        tuple: A tuple containing the matplotlib 3D axes object and the figure object.
+
+    """
+
 
     x1 = tsne_fit[:, 0]
     x2 = tsne_fit[:, 1]

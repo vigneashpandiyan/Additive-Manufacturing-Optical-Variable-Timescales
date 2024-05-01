@@ -1,13 +1,15 @@
 # -*- coding: utf-8 -*-
 """
-Created on Wed Feb  7 21:57:22 2024
-
 @author: srpv
-contact: vigneashwara.solairajapandiyan@empa.ch
+contact: vigneashwara.solairajapandiyan@empa.ch,vigneashpandiyan@gmail.com
+
 The codes in this following script will be used for the publication of the following work
 "Pyrometry-based in-situ Layer Thickness Identification via Vector-length Aware Self-Supervised Learning"
+
 @any reuse of this code should be authorized by the code author
 """
+#%%
+#Libraries to import
 
 import numpy as np
 import torch
@@ -22,15 +24,31 @@ import os
 
 
 def Encoder_backbone_evaluation(x_train, y_train, x_val, y_val, x_test, y_test, nb_class, ckpt, opt, folder_created,graph_name, epoch_length, ckpt_tosave=None):
-    # no augmentations used for linear evaluation
+    """
+    Evaluate the performance of the encoder backbone model.
 
-    # folder_created = os.path.join('Figures/', graph_name)
-    # print(folder_created)
-    # try:
-    #     os.makedirs(folder_created, exist_ok=True)
-    #     print("Directory created....")
-    # except OSError as error:
-    #     print("Directory already exists....")
+    Args:
+        x_train (numpy.ndarray): Training data.
+        y_train (numpy.ndarray): Training labels.
+        x_val (numpy.ndarray): Validation data.
+        y_val (numpy.ndarray): Validation labels.
+        x_test (numpy.ndarray): Test data.
+        y_test (numpy.ndarray): Test labels.
+        nb_class (list): List of class labels.
+        ckpt (str): Path to the saved backbone model checkpoint.
+        opt (object): Object containing various options and hyperparameters.
+        folder_created (str): Path to the folder where the results will be saved.
+        graph_name (str): Name of the graph.
+        epoch_length (int): Number of epochs.
+        ckpt_tosave (str, optional): Path to save the linear layer checkpoint. Defaults to None.
+
+    Returns:
+        float: Test accuracy.
+        int: Best epoch.
+
+    """
+
+    # Data loaders
 
     transform_lineval = transforms.Compose([transforms.ToTensor()])
 
@@ -66,6 +84,8 @@ def Encoder_backbone_evaluation(x_train, y_train, x_val, y_val, x_test, y_test, 
     best_epoch = 0
     num = opt.bayesian_train_size
     print('Linear evaluation')
+
+    # Training the linear layer
     for epoch in range(opt.epochs_test):
         linear_layer.train()
         backbone_lineval.eval()
@@ -165,6 +185,18 @@ def Encoder_backbone_evaluation(x_train, y_train, x_val, y_val, x_test, y_test, 
 # %%
 
 def plot_confusion_matrix(y_true, y_pred, folder_created, graph_name):
+    """
+    Plot the confusion matrix.
+
+    Args:
+        y_true (array-like): The true labels.
+        y_pred (array-like): The predicted labels.
+        folder_created (str): The folder path where the graph will be saved.
+        graph_name (str): The name of the graph.
+
+    Returns:
+        None
+    """
 
     # classes = ('1', '2', '3')
     classes = np.unique(y_true)

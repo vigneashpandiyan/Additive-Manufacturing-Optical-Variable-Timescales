@@ -1,23 +1,41 @@
 # -*- coding: utf-8 -*-
 """
-Created on Wed Feb  7 21:57:22 2024
-
 @author: srpv
-contact: vigneashwara.solairajapandiyan@empa.ch
+contact: vigneashwara.solairajapandiyan@empa.ch,vigneashpandiyan@gmail.com
+
 The codes in this following script will be used for the publication of the following work
 "Pyrometry-based in-situ Layer Thickness Identification via Vector-length Aware Self-Supervised Learning"
+
 @any reuse of this code should be authorized by the code author
 """
-
+#%%
+#Libraries to import
 
 import numpy as np
 import torch.utils.data as data
 
 
 class LPBF_Inter_Intra_reasoning(data.Dataset):
+    """
+    This class represents a dataset for LPBF Inter-Intra reasoning.
+
+    Args:
+        data (array-like): The input data.
+        targets (array-like): The target values.
+        K (int): The total number of augmentations.
+        transform (callable): A function/transform to apply to the data.
+        transform_cut (callable): A function/transform to apply to the transformed data.
+        totensor_transform (callable): A function/transform to convert the data to tensors.
+        n_epoch (int): The number of epochs.
+        starting_p (int): The starting point.
+        stopping_p (int): The stopping point.
+        window_size (int): The window size.
+
+    Returns:
+        tuple: A tuple containing the transformed data, cut data, labels, and target value.
+    """
 
     def __init__(self, data, targets, K, transform, transform_cut, totensor_transform, n_epoch, starting_p, stopping_p, window_size):
-
         self.data = np.asarray(data, dtype=np.float32)
         self.targets = np.asarray(targets, dtype=np.int16)
         self.K = K  # tot number of augmentations

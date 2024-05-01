@@ -34,6 +34,7 @@ from parser import parse_option
 print(torch.cuda.is_available())
 print(torch.__version__)
 Seeds = [0, 1, 2, 3, 4]
+
 for seed in Seeds:
     np.random.seed(seed)
     torch.manual_seed(seed)

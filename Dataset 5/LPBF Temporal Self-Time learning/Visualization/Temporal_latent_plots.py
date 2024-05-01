@@ -1,14 +1,15 @@
 # -*- coding: utf-8 -*-
 """
-Created on Wed Feb  7 21:57:22 2024
-
 @author: srpv
-contact: vigneashwara.solairajapandiyan@empa.ch
+contact: vigneashwara.solairajapandiyan@empa.ch,vigneashpandiyan@gmail.com
+
 The codes in this following script will be used for the publication of the following work
 "Pyrometry-based in-situ Layer Thickness Identification via Vector-length Aware Self-Supervised Learning"
+
 @any reuse of this code should be authorized by the code author
 """
-
+#%%
+#Libraries to import
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -20,20 +21,21 @@ import itertools
 import seaborn as sns
 
 
+def latent_plots(folder_created, graph_name, epoch_length):
+    """
+    Generate latent plots for visualization.
 
-def latent_plots(folder_created,graph_name, epoch_length):
+    Args:
+        folder_created (str): Path to the folder where the embeddings and labels are stored.
+        graph_name (str): Name of the graph.
+        epoch_length (int): Length of each epoch.
 
-    # folder_created = os.path.join('Figures/', graph_name)
-    # print(folder_created)
-    # try:
-    #     os.makedirs(folder_created, exist_ok=True)
-    #     print("Directory created....")
-    # except OSError as error:
-    #     print("Directory already exists....")
+    Returns:
+        None
+    """
 
-    train_embeddings = folder_created+'/' + \
-        str(graph_name)+'_'+str(epoch_length)+'_embeddings' + '.npy'
-    train_labelsname = folder_created+'/'+str(graph_name)+'_'+str(epoch_length)+'_labels'+'.npy'
+    train_embeddings = folder_created + '/' + str(graph_name) + '_' + str(epoch_length) + '_embeddings' + '.npy'
+    train_labelsname = folder_created + '/' + str(graph_name) + '_' + str(epoch_length) + '_labels' + '.npy'
 
     X_train = np.load(train_embeddings).astype(np.float64)
     y_train = np.load(train_labelsname).astype(np.float64)
@@ -44,13 +46,6 @@ def latent_plots(folder_created,graph_name, epoch_length):
     columns = np.atleast_2d(Featurespace).shape[1]
     df2 = pd.DataFrame(classspace)
     df2.columns = ['Categorical']
-
-    # df2=df2['Categorical'].replace(0,'LoF')
-    # df2 = pd.DataFrame(df2)
-    # df2=df2['Categorical'].replace(1,'Conduction mode')
-    # df2 = pd.DataFrame(df2)
-    # df2=df2['Categorical'].replace(2,'Keyhole')
-    # df2 = pd.DataFrame(df2)
 
     print(columns)
 
@@ -75,6 +70,7 @@ def latent_plots(folder_created,graph_name, epoch_length):
 
 def plot_windows(epochs, window_size, path):
 
+    
     plt.rcParams.update(plt.rcParamsDefault)
     plt.figure(figsize=(3, 5))
     window_length = [window_size - x for x in epochs]
@@ -91,6 +87,18 @@ def plot_windows(epochs, window_size, path):
 
 
 def distribution_plot(data, i, folder_created):
+    """
+    Plots the distribution of a feature in the given dataset.
+
+    Args:
+        data (pandas.DataFrame): The dataset containing the feature to be plotted.
+        i (int): The index of the weight.
+        folder_created (str): The path of the folder where the plot will be saved.
+
+    Returns:
+        None
+    """
+
 
     new_columns = list(data.columns)
     new_columns[-1] = 'target'
@@ -129,10 +137,9 @@ def distribution_plot(data, i, folder_created):
 
 # %%
 
-
-
-
 def Cummulative_plots(Featurespace, classspace, i, ax):
+
+    
 
     columns = np.atleast_2d(Featurespace).shape[1]
     df2 = pd.DataFrame(classspace)
@@ -156,6 +163,18 @@ def Cummulative_plots(Featurespace, classspace, i, ax):
 
 
 def Cummulative_dist_plot(data, i, ax):
+    """
+    Plots the cumulative distribution of a given dataset.
+
+    Args:
+        data (DataFrame): The input dataset.
+        i (int): The weight index.
+        ax (AxesSubplot): The matplotlib axes object to plot on.
+
+    Returns:
+        None
+    """
+
     new_columns = list(data.columns)
     new_columns[-1] = 'target'
     data.columns = new_columns
@@ -182,30 +201,7 @@ def Cummulative_dist_plot(data, i, ax):
         c = next(color)
         sns.kdeplot(data_1['Feature'], shade=True, alpha=.5, color=c, ax=ax)
 
-    # plt.title("Weight " + str(i+1))
-    # # plt.legend(labels=['LoF pores','Conduction mode','Keyhole pores'],bbox_to_anchor=(1.49, 1.05))
-    # title=folder_created+'/'+'Dimension'+'_'+str(i+1)+'_'+'distribution_plot'+'.png'
-    # # plt.xlim([0.0, np.max(data)])
-    # # plt.ylim([0.0, 65])
-    # plt.xlabel('Weight distribution')
-    # plt.savefig(title, bbox_inches='tight')
-    # plt.show()
-
-    # data_1 = data[data.target == 'LoF']
-    # data_1 = data_1.drop(labels='target', axis=1)
-    # data_2 = data[data.target == 'Conduction mode']
-    # data_2 = data_2.drop(labels='target', axis=1)
-    # data_3 = data[data.target == 'Keyhole']
-    # data_3 = data_3.drop(labels='target', axis=1)
-
-    # plt.rcParams.update(plt.rcParamsDefault)
-    # sns.set(style="white")
-
-    # ax.plot(figsize=(5,5), dpi=800)
-    # sns.kdeplot(data_1['Feature'], shade=True,alpha=.5, color="blue",ax=ax)
-    # sns.kdeplot(data_2['Feature'], shade=True,alpha=.5, color="green",ax=ax)
-    # sns.kdeplot(data_3['Feature'], shade=True,alpha=.5, color="red",ax=ax)
-
+    
     ax.set_title("Weight " + str(i+1), y=1.0, pad=-14)
     ax.set_xlabel('Weight distribution')
     # ax.set_ylabel('Density')
@@ -217,7 +213,17 @@ def Cummulative_dist_plot(data, i, ax):
 
 
 def all_plot(X_train, y_train, folder_created):
+    """
+    Plots the temporal latent plots for each feature in the given dataset.
 
+    Args:
+        X_train (numpy.ndarray): The input training data.
+        y_train (numpy.ndarray): The target training data.
+        folder_created (str): The folder path where the plots will be saved.
+
+    Returns:
+        None
+    """
     columns = X_train.shape[1]
     columns = columns/8
     fig, axs = plt.subplots(

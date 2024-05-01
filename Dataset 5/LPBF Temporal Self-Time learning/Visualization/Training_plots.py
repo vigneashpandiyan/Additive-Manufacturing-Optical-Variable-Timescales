@@ -1,20 +1,38 @@
 # -*- coding: utf-8 -*-
 """
-Created on Wed Feb  7 21:57:22 2024
-
 @author: srpv
-contact: vigneashwara.solairajapandiyan@empa.ch
+contact: vigneashwara.solairajapandiyan@empa.ch,vigneashpandiyan@gmail.com
+
 The codes in this following script will be used for the publication of the following work
 "Pyrometry-based in-situ Layer Thickness Identification via Vector-length Aware Self-Supervised Learning"
+
 @any reuse of this code should be authorized by the code author
 """
-
+#%%
+#Libraries to import
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
 
 def training_plots(Training_loss, Training_accuracy, Training_loss_mean, Training_loss_std, learning_rate, Times, window_size):
+    """
+    Generate training plots for loss, accuracy, learning rate, and window lengths.
+
+    Args:
+        Training_loss (list): List of training loss values.
+        Training_accuracy (list): List of training accuracy values.
+        Training_loss_mean (list): List of mean training loss values.
+        Training_loss_std (list): List of training loss standard deviation values.
+        learning_rate (list): List of learning rate values.
+        Times (list): List of time values.
+        window_size (int): Size of the window.
+
+    Returns:
+        None
+    """
+
+
 
     Training_loss = np.asarray(Training_loss)
     Training_loss = Training_loss.astype(np.float64)

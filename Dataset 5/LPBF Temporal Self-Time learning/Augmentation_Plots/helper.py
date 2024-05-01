@@ -1,13 +1,15 @@
 # -*- coding: utf-8 -*-
 """
-Created on Wed Feb  7 21:57:22 2024
-
 @author: srpv
-contact: vigneashwara.solairajapandiyan@empa.ch
+contact: vigneashwara.solairajapandiyan@empa.ch,vigneashpandiyan@gmail.com
+
 The codes in this following script will be used for the publication of the following work
 "Pyrometry-based in-situ Layer Thickness Identification via Vector-length Aware Self-Supervised Learning"
+
 @any reuse of this code should be authorized by the code author
 """
+#%%
+#Libraries to import
 
 
 import numpy as np
@@ -16,6 +18,20 @@ import random
 
 
 def plot_d(x, t, x_, colour, save_file='', Transformation=''):
+    """
+    Plots the original signal and the transformed signal.
+
+    Args:
+        x (numpy.ndarray): The original signal.
+        t (numpy.ndarray): The time values corresponding to the signal.
+        x_ (numpy.ndarray): The transformed signal.
+        colour (str): The color of the transformed signal.
+        save_file (str, optional): The file path to save the plot. Defaults to ''.
+        Transformation (str, optional): The name of the transformation applied to the signal. Defaults to ''.
+
+    Returns:
+        None
+    """
 
     fig = plt.figure(figsize=(9, 4))
     plt.title('Original signal -- ' + str(Transformation), fontsize=15)
@@ -39,7 +55,17 @@ def plot_d(x, t, x_, colour, save_file='', Transformation=''):
 
 
 def plot1d(x, t, save_file=""):
-    import matplotlib.pyplot as plt
+    """
+    Plots a 1-dimensional signal.
+
+    Args:
+        x (array-like): The signal values.
+        t (array-like): The time values corresponding to the signal.
+        save_file (str, optional): The file path to save the plot. Defaults to "".
+
+    Returns:
+        None
+    """
 
     plt.figure(figsize=(9, 5))
 
@@ -54,9 +80,6 @@ def plot1d(x, t, save_file=""):
 
     plt.legend(['Original signal'], fontsize=12)
 
-    # plt.ylim([-1.2, 1.2])
-    # plt.ylim([np.min(x)*1.3, np.max(x)*1.3])
-
     plt.tight_layout()
     if save_file:
         plt.savefig(save_file, dpi=100)
@@ -64,6 +87,20 @@ def plot1d(x, t, save_file=""):
 
 
 def plot_time_series(x, t, x_, ax, colour, transformation):
+    """
+    Plots the time series data.
+
+    Args:
+        x (numpy.ndarray): The original signal.
+        t (numpy.ndarray): The time values.
+        x_ (numpy.ndarray): The transformed signal.
+        ax (matplotlib.axes.Axes): The axes object to plot on.
+        colour (str): The color of the transformed signal plot.
+        transformation (str): The name of the transformation.
+
+    Returns:
+        None
+    """
 
     ax.plot(t, x.ravel(), 'black', color='0.4', linewidth=2)
     ax.plot(t, x_.ravel(), colour, ls='--', linewidth=0.75)

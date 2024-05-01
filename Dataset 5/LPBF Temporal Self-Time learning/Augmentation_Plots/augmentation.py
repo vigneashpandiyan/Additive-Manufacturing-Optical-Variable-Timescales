@@ -1,27 +1,31 @@
 # -*- coding: utf-8 -*-
 """
-Created on Wed Feb  7 21:57:22 2024
-
 @author: srpv
-contact: vigneashwara.solairajapandiyan@empa.ch
+contact: vigneashwara.solairajapandiyan@empa.ch,vigneashpandiyan@gmail.com
+
 The codes in this following script will be used for the publication of the following work
 "Pyrometry-based in-situ Layer Thickness Identification via Vector-length Aware Self-Supervised Learning"
+
 @any reuse of this code should be authorized by the code author
 """
-
+#%%
+#Libraries to import
 
 import numpy as np
 import pandas as pd
 
 
-# def normalize(ts, Features_train_max, Features_train_min):
-
-#     ts = 2. * (ts - Features_train_min) / (Features_train_max - Features_train_min) - 1.
-
-#     return ts
-
-
 def normalize_to_minus_one(array):
+    """
+    Normalize the given array to the range of -1 to 1.
+
+    Parameters:
+    array (numpy.ndarray): The input array to be normalized.
+
+    Returns:
+    numpy.ndarray: The normalized array with values ranging from -1 to 1.
+    """
+
     min_val = np.min(array)
     max_val = np.max(array)
     normalized_array = [((x - min_val) / (max_val - min_val)) * 2 - 1 for x in array]
@@ -32,6 +36,9 @@ def normalize_to_minus_one(array):
 
 
 def load_LPBF(path, dataset_name, dataset_label):
+
+    
+
     ##################
     # load raw data
     ##################

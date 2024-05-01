@@ -1,20 +1,19 @@
 # -*- coding: utf-8 -*-
 """
-Created on Wed Feb  7 21:57:22 2024
-
 @author: srpv
-contact: vigneashwara.solairajapandiyan@empa.ch
+contact: vigneashwara.solairajapandiyan@empa.ch,vigneashpandiyan@gmail.com
+
 The codes in this following script will be used for the publication of the following work
 "Pyrometry-based in-situ Layer Thickness Identification via Vector-length Aware Self-Supervised Learning"
+
 @any reuse of this code should be authorized by the code author
 """
-# %%
-# Libraries to import
+#%%
+#Libraries to import
 import numpy as np
 import pandas as pd
 import pywt
 import scipy.signal as signal
-
 from scipy.stats import kurtosis, skew
 from scipy.signal import welch, periodogram
 from numpy.fft import fftshift, fft
@@ -28,16 +27,36 @@ from scipy.stats import entropy
 
 
 def normalize_to_minus_one(array):
+
+    """
+    Normalize an array to the range of -1 to 1.
+
+    Args:
+        array (numpy.ndarray): The input array to be normalized.
+
+    Returns:
+        numpy.ndarray: The normalized array.
+
+    """
+
     min_val = np.min(array)
     max_val = np.max(array)
     normalized_array = [((x - min_val) / (max_val - min_val)) * 2 - 1 for x in array]
-
     normalized_array = np.array(normalized_array)
 
     return normalized_array
 
 
 def Zerocross(a):
+    """
+    Calculates the number of zero crossings in an array.
+
+    Parameters:
+    a (array-like): Input array.
+
+    Returns:
+    int: Number of zero crossings in the input array.
+    """
     zero_crossings = np.where(np.diff(np.signbit(a)))[0]
     cross = zero_crossings.size
     #print (cross)
@@ -45,9 +64,17 @@ def Zerocross(a):
 
 
 # %%
-
-
 def autopeaks(psd):
+    """
+    Finds the highest peaks in a given power spectral density (PSD) array.
+
+    Parameters:
+    psd (array-like): The power spectral density array.
+
+    Returns:
+    list: A list of the highest peak values in the PSD array. The list will contain
+          up to 4 values, with missing values replaced by zeros.
+    """
     import scipy.signal
     indexes, value = scipy.signal.find_peaks(psd, height=0, distance=None)
     a = value['peak_heights']
@@ -64,11 +91,31 @@ def autopeaks(psd):
 
 
 def autocorr(x):
+    """
+    Calculates the autocorrelation of a given input signal.
+
+    Parameters:
+    x (array-like): The input signal for which autocorrelation needs to be calculated.
+
+    Returns:
+    array-like: The autocorrelation of the input signal.
+    """
+
     result = np.correlate(x, x, mode='full')
     return result[len(result)//2:]
 
 
 def get_autocorr_values(y_values):
+    """
+    Calculate the autocorrelation values of the given input signal.
+
+    Parameters:
+    y_values (array-like): The input signal values.
+
+    Returns:
+    array-like: The autocorrelation values of the input signal.
+    """
+
     autocorr_values = autocorr(y_values)
     peaks = autopeaks(autocorr_values)
     peaks = np.asarray(peaks)
@@ -78,6 +125,17 @@ def get_autocorr_values(y_values):
 # %%
 
 def function_time(val, window):
+
+    """
+        Calculate time-domain features for a given signal.
+
+        Parameters:
+        val (array-like): The input signal values.
+        window (int): The size of the window for splitting the signal.
+
+        Returns:
+        numpy.ndarray: The feature vectors containing time-domain features for each window of the signal.
+    """
 
     # data_new=data_new.transpose()
 
@@ -154,27 +212,30 @@ def function_time(val, window):
 
 # %%
 
-
 def Timefunction(data_new, windowsize):
+    """
+    Calculate time-domain features for a given dataset.
+
+    Parameters:
+    data_new (numpy.ndarray): The input dataset.
+    windowsize (int): The size of the window for splitting the dataset.
+
+    Returns:
+    list: A list of feature vectors containing time-domain features for each window of the dataset.
+    """
+    
     columnsdata = data_new.transpose()
     columns = np.atleast_2d(columnsdata).shape[1]
     featurelist = []
 
-    # for row in loop:
     for k in range(columns):
-
         val = columnsdata[:, k]
         totaldatapoints = val.size
         window = round(totaldatapoints/windowsize)
 
-        # print("Before function",val.shape)
-
         Feature_vectors = function_time(val, window)
 
-        print(k)
-
         for item in Feature_vectors:
-
             featurelist.append(item)
 
     return featurelist

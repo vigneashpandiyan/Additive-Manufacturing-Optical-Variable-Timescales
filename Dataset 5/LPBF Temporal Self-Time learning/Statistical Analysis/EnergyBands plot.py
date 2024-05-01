@@ -1,15 +1,15 @@
 # -*- coding: utf-8 -*-
 """
-Created on Wed Feb  7 21:57:22 2024
-
 @author: srpv
-contact: vigneashwara.solairajapandiyan@empa.ch
+contact: vigneashwara.solairajapandiyan@empa.ch,vigneashpandiyan@gmail.com
+
 The codes in this following script will be used for the publication of the following work
 "Pyrometry-based in-situ Layer Thickness Identification via Vector-length Aware Self-Supervised Learning"
+
 @any reuse of this code should be authorized by the code author
 """
-# %%
-# Libraries to import
+#%%
+#Libraries to import
 
 import numpy as np
 import pandas as pd
@@ -23,14 +23,18 @@ import matplotlib.patches as mpatches
 from matplotlib import colors
 import os
 
+#%%
 sns.set(font_scale=1.5)
 sns.set_style("whitegrid", {'axes.grid': False})
 sns.set_style("ticks", {"xtick.major.size": 8, "ytick.major.size": 8})
 
-
+#%%
+# %%
+# Get the path of the current working directory
 file = os.path.join(os.getcwd(), os.listdir(os.getcwd())[0])
 total_path = os.path.dirname(file)
 print(total_path)
+# Create a folder to save the data
 folder_name = 'Visualization_Plots'
 path_ = os.path.join(total_path, folder_name)
 print("Name of the folder..", path_)
@@ -41,8 +45,8 @@ try:
 except OSError as error:
     print("Directory already exists....")
 
-
-data_feature = os.path.join(total_path, 'Feature_FFT_1500.npy')
+#%%
+data_feature = os.path.join(total_path, 'Feature_FFT_1000.npy')
 print(data_feature)
 data_feature = np.load(data_feature)
 print(data_feature.shape[1])
@@ -53,30 +57,29 @@ data_class = np.load(data_class)
 print(data_class.shape)
 data_class = pd.DataFrame(data_class)
 data_class.columns = ['Categorical']
-data_class = data_class['Categorical'].replace(0, 'Remelt')
-data_class = pd.DataFrame(data_class)
-data_class = data_class['Categorical'].replace(1, '10 µm')
-data_class = pd.DataFrame(data_class)
-data_class = data_class['Categorical'].replace(2, '20 µm')
-data_class = pd.DataFrame(data_class)
-data_class = data_class['Categorical'].replace(3, '30 µm')
-data_class = pd.DataFrame(data_class)
-data_class = data_class['Categorical'].replace(4, '40 µm')
-data_class = pd.DataFrame(data_class)
-data_class = data_class['Categorical'].replace(5, '50 µm')
-data_class = pd.DataFrame(data_class)
-data_class = data_class['Categorical'].replace(6, '60 µm')
-data_class = pd.DataFrame(data_class)
-data_class = data_class['Categorical'].replace(7, '70 µm')
-data_class = pd.DataFrame(data_class)
-data_class = data_class['Categorical'].replace(8, '80 µm')
-data_class = pd.DataFrame(data_class)
-data_class = data_class['Categorical'].replace(9, '90 µm')
-data_class = pd.DataFrame(data_class)
 
-
-# %%
-
+data_class = data_class['Categorical'].replace(0, '10 µm')
+data_class = pd.DataFrame(data_class)
+data_class = data_class['Categorical'].replace(1, '20 µm')
+data_class = pd.DataFrame(data_class)
+data_class = data_class['Categorical'].replace(2, '30 µm')
+data_class = pd.DataFrame(data_class)
+data_class = data_class['Categorical'].replace(3, '40 µm')
+data_class = pd.DataFrame(data_class)
+data_class = data_class['Categorical'].replace(4, '50 µm')
+data_class = pd.DataFrame(data_class)
+data_class = data_class['Categorical'].replace(5, '60 µm')
+data_class = pd.DataFrame(data_class)
+data_class = data_class['Categorical'].replace(6, '70 µm')
+data_class = pd.DataFrame(data_class)
+data_class = data_class['Categorical'].replace(7, '80 µm')
+data_class = pd.DataFrame(data_class)
+data_class = data_class['Categorical'].replace(8, '90 µm')
+data_class = pd.DataFrame(data_class)
+data_class = data_class['Categorical'].replace(9, '100 µm')
+data_class = pd.DataFrame(data_class)
+data_class = data_class['Categorical'].replace(10, '110 µm')
+data_class = pd.DataFrame(data_class)
 
 data = pd.concat([data_feature, data_class], axis=1)
 print("Respective windows per category", data.Categorical.value_counts())
@@ -89,18 +92,14 @@ print("Balanced dataset: ", data_1.Categorical.value_counts())
 
 Featurespace = data_1.iloc[:, :-1]
 classspace = data_1.iloc[:, -1]
-
 classspace = classspace.to_numpy()
 Featurespace = Featurespace.to_numpy()
 
 feature = ['0-10 kHZ', '10-20 kHZ', '20-30 kHZ', '30-40 kHZ', '40-50 kHZ']
-
 len(feature)
-
 Featurespace = Featurespace[:, 0:len(feature)]
 # %%
-
-
+# Plotting the features in the EDA analysis
 def boxcomparisonplots(y_pred, y_true, path):
 
     Featurespace = pd.DataFrame(y_pred)
