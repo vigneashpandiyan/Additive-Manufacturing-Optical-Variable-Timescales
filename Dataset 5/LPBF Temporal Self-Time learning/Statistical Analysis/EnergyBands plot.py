@@ -8,8 +8,8 @@ The codes in this following script will be used for the publication of the follo
 
 @any reuse of this code should be authorized by the code author
 """
-#%%
-#Libraries to import
+# %%
+# Libraries to import
 
 import numpy as np
 import pandas as pd
@@ -23,12 +23,12 @@ import matplotlib.patches as mpatches
 from matplotlib import colors
 import os
 
-#%%
+# %%
 sns.set(font_scale=1.5)
 sns.set_style("whitegrid", {'axes.grid': False})
 sns.set_style("ticks", {"xtick.major.size": 8, "ytick.major.size": 8})
 
-#%%
+# %%
 # %%
 # Get the path of the current working directory
 file = os.path.join(os.getcwd(), os.listdir(os.getcwd())[0])
@@ -45,13 +45,13 @@ try:
 except OSError as error:
     print("Directory already exists....")
 
-#%%
+# %%
 data_feature = os.path.join(total_path, 'Feature_FFT_1000.npy')
 print(data_feature)
 data_feature = np.load(data_feature)
 print(data_feature.shape[1])
 data_feature = pd.DataFrame(data_feature)
-data_class = os.path.join(total_path, 'classpace_1500.npy')
+data_class = os.path.join(total_path, 'classpace_1000.npy')
 print(data_class)
 data_class = np.load(data_class)
 print(data_class.shape)
@@ -100,6 +100,8 @@ len(feature)
 Featurespace = Featurespace[:, 0:len(feature)]
 # %%
 # Plotting the features in the EDA analysis
+
+
 def boxcomparisonplots(y_pred, y_true, path):
 
     Featurespace = pd.DataFrame(y_pred)

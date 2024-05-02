@@ -8,8 +8,8 @@ The codes in this following script will be used for the publication of the follo
 
 @any reuse of this code should be authorized by the code author
 """
-#%%
-#Libraries to import
+# %%
+# Libraries to import
 
 import numpy as np
 import scipy.signal as signal
@@ -24,12 +24,12 @@ file = os.path.join(os.getcwd(), os.listdir(os.getcwd())[0])
 total_path = os.path.dirname(file)
 print(total_path)
 
-#%%
+# %%
 # More info on the dataset/sampling rate/ window size
-folder_name = 'Windowed' # Name of the folder
-sample_rate = 100000 # Sampling rate
-windowsize = 1000 # Window size i.e the datapoints inside each row
-#%%
+folder_name = 'Windowed'  # Name of the folder
+sample_rate = 100000  # Sampling rate
+windowsize = 1000  # Window size i.e the datapoints inside each row
+# %%
 N = windowsize
 t0 = 0
 dt = 1/sample_rate
@@ -47,8 +47,9 @@ except OSError as error:
     print("Directory already exists....")
 
 # %%
-#load the dataset and normalize the dataset
-path = r'C:\Users\srpv\Desktop\ETH zurich-Dataset 5\LPBF Temporal Self-Time learning\Data'
+# load the dataset and normalize the dataset
+# http://dx.doi.org/10.5281/zenodo.11101714
+path = r'C:\Users\srpv\Desktop\Git\Additive-Manufacturing-Optical-Variable-Timescales\Dataset 5\LPBF Temporal Self-Time learning\Data'
 dataset_name = 'D1_rawspace_1000.npy'
 dataset_label = 'D1_classspace_1000.npy'
 print("dataset_path...", path)

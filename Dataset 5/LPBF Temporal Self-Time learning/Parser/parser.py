@@ -8,16 +8,14 @@ The codes in this following script will be used for the publication of the follo
 
 @any reuse of this code should be authorized by the code author
 """
-#%%
-#Libraries to import
+# %%
+# Libraries to import
 import argparse
 
 
 def parse_option():
-    
-    
-    # Training parameters
 
+    # Training parameters
 
     parser = argparse.ArgumentParser('argument for training')
 
@@ -55,13 +53,13 @@ def parse_option():
 
     parser.add_argument('--batch_size', type=int, default=128,
                         help='batch_size')
-    parser.add_argument('--epochs', type=int, default=5,
+    parser.add_argument('--epochs', type=int, default=200,
                         help='number of training epochs')
 
     parser.add_argument('--bayesian_train_size', type=int, default=1,
                         help='bayesian_train_size')  # default training
 
-    parser.add_argument('--epochs_test', type=int, default=5,
+    parser.add_argument('--epochs_test', type=int, default=100,
                         help='number of test epochs')
 
     # parser.add_argument('--bayesian_size', type=int, default=1,

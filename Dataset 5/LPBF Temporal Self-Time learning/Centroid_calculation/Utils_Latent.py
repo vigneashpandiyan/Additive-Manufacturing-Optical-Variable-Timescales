@@ -8,8 +8,8 @@ The codes in this following script will be used for the publication of the follo
 
 @any reuse of this code should be authorized by the code author
 """
-#%%
-#Libraries to import
+# %%
+# Libraries to import
 # %
 import numpy as np
 from matplotlib.pyplot import cm
@@ -18,21 +18,18 @@ import matplotlib.pyplot as plt
 import pandas as pd
 
 
-def plot_latent_2D(epoch_length, folder_created, filename):
+def plot_latent_2D(epoch_length, folder_created, filename, group, window_size):
     """
     Plots the 2D latent space representation of the given features using t-SNE algorithm.
-    
+
     Args:
         epoch_length (int): The length of the epoch.
         folder_created (str): The path of the folder where the embeddings and labels are stored.
         filename (str): The name of the file.
-        
+
     Returns:
         tuple: A tuple containing the features and class labels.
     """
-    
-
-    
 
     # for epoch_length in window_lengths:
 
@@ -44,7 +41,6 @@ def plot_latent_2D(epoch_length, folder_created, filename):
 
     class_labels = np.load(train_labelsname)
     classes = np.unique(class_labels)
-    group = [0, 4, 9]
 
     centroids = plot_centroids(features, class_labels, group)
     Featurespace = pd.DataFrame(features)
@@ -62,7 +58,7 @@ def plot_latent_2D(epoch_length, folder_created, filename):
     labels = ['10 um', '20 um', '30 um', '40 um',
               '50 um', '60 um', '70 um', '80 um', '90 um', '100 um', '110 um']
     plt.rcParams.update(plt.rcParamsDefault)
-    fig = plt.figure(figsize=(6, 6), dpi=200)
+    fig = plt.figure(figsize=(8, 8), dpi=200)
     j = 0
     for i in group:
 
@@ -78,15 +74,18 @@ def plot_latent_2D(epoch_length, folder_created, filename):
         a = x1[indx]
         b = x2[indx]
 
-        plt.plot(a, b, color=c, label=labels[i], marker=m, linestyle='', ms=10)
+        plt.plot(a, b, color=c, label=labels[i], marker=m, linestyle='', ms=10, zorder=-1)
 
     plt.scatter(centroids[:, 0], centroids[:, 1],
-                marker='D', color='black', label='Centroids', s=100)
+                marker='D', color='black', label='Centroids', s=100, zorder=1)
 
     plt.xlabel('Dimension 1', labelpad=15, fontsize=20)
     plt.ylabel('Dimension 2', labelpad=15, fontsize=20)
     title = 'Centroids on lower dimensional embeddings computed' + "\n" + \
-        'on window length of '+str(1500-epoch_length)+' data points'
+        'on window length of '+str(window_size-epoch_length)+' data points'
+
+    plt.xlim(-30, 30)
+    plt.ylim(-30, 30)
     plt.legend()
     plt.locator_params(nbins=6)
 
@@ -164,8 +163,6 @@ def plot_centroids(features, class_labels, group):
         # Assign centroid to centroids array
         centroids[j] = class_centroid
         j = j+1
-
-
 
     return centroids
 

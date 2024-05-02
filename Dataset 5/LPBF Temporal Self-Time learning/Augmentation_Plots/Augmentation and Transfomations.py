@@ -8,8 +8,8 @@ The codes in this following script will be used for the publication of the follo
 
 @any reuse of this code should be authorized by the code author
 """
-#%%
-#Libraries to import
+# %%
+# Libraries to import
 
 # Libraries to import
 import random
@@ -24,9 +24,9 @@ import matplotlib.pyplot as plt
 colour = ['red', 'blue', 'green', 'pink', 'orange',
           'purple', 'red', 'cyan', 'yellow', 'limegreen', 'black']
 # path to the data folder
-path = r'C:\Users\srpv\Desktop\C4Science\lpbf-optical-variable-time-scales\LPBF Temporal Self-Time learning\Data'
-dataset_name = 'D1_rawspace_1500.npy'
-dataset_label = 'D1_classspace_1500.npy'
+path = r'C:\Users\srpv\Desktop\Git\Additive-Manufacturing-Optical-Variable-Timescales\Dataset 5\LPBF Temporal Self-Time learning\Data'
+dataset_name = 'D1_rawspace_1000.npy'
+dataset_label = 'D1_classspace_1000.npy'
 sample_rate = 100000
 
 x_train, y_train, x_val, y_val, x_test, y_test, nb_class = aug.load_LPBF(

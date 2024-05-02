@@ -8,8 +8,8 @@ The codes in this following script will be used for the publication of the follo
 
 @any reuse of this code should be authorized by the code author
 """
-#%%
-#Libraries to import
+# %%
+# Libraries to import
 
 import numpy as np
 import pandas as pd
@@ -22,7 +22,7 @@ from matplotlib import colors
 from Utils_visualization import *
 
 # %%
-
+# http://dx.doi.org/10.5281/zenodo.11101714
 sns.set(font_scale=1.5)
 sns.set_style("whitegrid", {'axes.grid': False})
 sns.set_style("ticks", {"xtick.major.size": 8, "ytick.major.size": 8})
@@ -32,7 +32,7 @@ sns.set_style("ticks", {"xtick.major.size": 8, "ytick.major.size": 8})
 file = os.path.join(os.getcwd(), os.listdir(os.getcwd())[0])
 total_path = os.path.dirname(file)
 print(total_path)
-#%%
+# %%
 # Create a folder to save the data
 folder_name = 'Visualization_Plots'
 path_ = os.path.join(total_path, folder_name)
@@ -44,7 +44,7 @@ try:
 except OSError as error:
     print("Directory already exists....")
 
-#%%
+# %%
 # Load the dataset with frequency domain features
 data_feature = os.path.join(total_path, 'Feature_FFT_1000.npy')
 print(data_feature)
@@ -76,22 +76,23 @@ classspace = data_1.iloc[:, -1]
 
 # %%
 # Plotting the features in the EDA analysis
-def plots(i, Featurespace, classspace, feature, path_):
 
+
+def plots(i, Featurespace, classspace, feature, path_):
     """
     This function plots various visualizations for exploratory data analysis (EDA).
-    
+
     Parameters:
         i (int): Index of the data point to plot.
         Featurespace (pd.DataFrame): DataFrame containing the feature data.
         classspace (pd.DataFrame): DataFrame containing the class labels.
         feature (str): Name of the feature to plot.
         path_ (str): Path to save the plots.
-        
+
     Returns:
         pd.DataFrame: DataFrame containing the plotted data.
     """
-    
+
     data = (Featurespace[i])
     data = data.astype(np.float64)
     df1 = pd.DataFrame(data)
@@ -139,6 +140,7 @@ def plots(i, Featurespace, classspace, feature, path_):
     kdeplotsplit(data, feature, path_)
 
     return data
+
 
 # %%
     # 4#7
