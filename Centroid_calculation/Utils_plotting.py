@@ -136,3 +136,7 @@ def Euclidean_2D(epoch_length, folder_created, filename):
     plt.savefig(os.path.join(folder_created, plot),
                 bbox_inches='tight', dpi=800)
     plt.show()
+
+
+
+    

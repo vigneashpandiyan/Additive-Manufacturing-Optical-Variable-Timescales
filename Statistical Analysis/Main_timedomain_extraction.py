@@ -45,7 +45,7 @@ except OSError as error:
 # %%
 # load the dataset and normalize the dataset
 # http://dx.doi.org/10.5281/zenodo.11101714
-path = r'C:\Users\vigneashwara.p\Desktop\C4Science\lpbf-optical-variable-window-length\Dataset'
+path = r'C:\Cloud\Github\Additive-Manufacturing-Optical-Variable-Timescales\Dataset'
 dataset_name = 'D1_rawspace_1000.npy'
 dataset_label = 'D1_classspace_1000.npy'
 print("dataset_path...", path)

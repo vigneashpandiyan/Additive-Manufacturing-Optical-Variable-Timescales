@@ -16,7 +16,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import os
 import seaborn as sns
-import joypy
+# import joypy
 from matplotlib import cm
 from matplotlib import colors
 from Utils_visualization import *

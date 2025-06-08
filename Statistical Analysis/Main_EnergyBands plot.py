@@ -183,12 +183,12 @@ def boxcomparisonplots(y_pred, y_true, path):
 
     ax._legend.remove()
     plt.legend(loc='lower right', frameon=False, fontsize=40)
-    plt.title('Powerspectral density distribution', fontsize=40, pad=10,)
-    plt.xlabel('Relative density', labelpad=15, fontsize=40)
-    plt.xticks(fontsize=35)
+    plt.title('Powerspectral density distribution', fontsize=50, pad=10,)
+    plt.xlabel('Spectral energy (a.u)', labelpad=15, fontsize=50)
+    plt.xticks(fontsize=45)
 
-    plt.ylabel('Frequency levels', labelpad=15, fontsize=40)
-    plt.yticks(fontsize=35)
+    plt.ylabel('Frequency levels', labelpad=15, fontsize=50)
+    plt.yticks(fontsize=45)
 
     # plt.ticklabel_format(style='plain', axis='x')
 
