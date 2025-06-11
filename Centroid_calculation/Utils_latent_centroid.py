@@ -12,43 +12,32 @@ The codes in this following script will be used for the publication of the follo
 # Libraries to import
 
 import numpy as np
-from scipy.spatial.distance import euclidean
-from sklearn.metrics import (
-    confusion_matrix,
-    classification_report,
-    ConfusionMatrixDisplay,
-    roc_curve,
-    accuracy_score,
-)
-import matplotlib.pyplot as plt
 import os
+import time
+import matplotlib.pyplot as plt
+from sklearn.metrics import accuracy_score, confusion_matrix, classification_report, roc_curve
+from scipy.spatial.distance import euclidean
 
 
-def anomaly_detection_centroid(epoch_length, folder_created, filename, threshold=None, ideal_label_value=30):
+def anomaly_detection_latent_centroid(epoch_length, folder_created, filename, threshold=None, ideal_label_value=30):
     """
     Performs anomaly detection using Euclidean distance to the '30 um' centroid.
     Includes centroid computation, auto-threshold selection (if None), prediction, evaluation, and visualization.
 
-    Args:
-        epoch_length (int): Epoch identifier for the filename.
-        folder_created (str): Folder containing the saved .npy files.
-        filename (str): Base name of the saved files.
-        threshold (float or None): Distance threshold; if None, will be automatically selected from ROC.
-
     Returns:
-        result (dict): Dictionary with centroids, distances, predictions, ground_truth, threshold, and confusion matrix.
+        result (dict): Includes centroids, distances, predictions, threshold, accuracy, and timing stats.
     """
 
     # Load data
-    features = np.load(f"{folder_created}/{filename}_TSNE_{epoch_length}.npy")
-    labels = np.load(f"{folder_created}/{filename}_label_{epoch_length}.npy")
+    features = np.load(
+        f"{folder_created}/{filename}_{epoch_length}_train_embeddings.npy")
+    labels = np.load(
+        f"{folder_created}/{filename}_{epoch_length}_train_labels.npy")
 
     # Label mapping
     new_labels = ['10 um', '20 um', '30 um', '40 um', '50 um', '60 um',
                   '70 um', '80 um', '90 um', '100 um', '110 um']
     label_map = dict(zip(range(len(new_labels)), new_labels))
-
-    # Find numeric label for '30 um'
     ideal_label_value = [k for k, v in label_map.items() if v == '30 um'][0]
 
     # Compute centroids
@@ -62,58 +51,66 @@ def anomaly_detection_centroid(epoch_length, folder_created, filename, threshold
 
     ideal_centroid = centroids[ideal_label_value]
 
-    # Compute distances to ideal centroid
-    distances = np.array([euclidean(vec, ideal_centroid) for vec in features])
+    # Compute distances
+    start_total = time.time()
+    distances = []
+    sample_times = []
+
+    for vec in features:
+        t0 = time.time()
+        d = euclidean(vec, ideal_centroid)
+        t1 = time.time()
+        distances.append(d)
+        sample_times.append(t1 - t0)
+
+    distances = np.array(distances)
     ground_truth = labels == ideal_label_value
 
-    # Automatically select threshold if not given
+    # Threshold auto-selection
     if threshold is None:
-        # Use -distances so "higher" = more normal
         fpr, tpr, thresholds = roc_curve(ground_truth, -distances)
         j_scores = tpr - fpr
         best_idx = np.argmax(j_scores)
-        threshold = -thresholds[best_idx]  # Convert back
+        threshold = -thresholds[best_idx]
         print(f"Auto-selected threshold (Youden's J): {threshold:.4f}")
 
-    # Predict based on threshold
+    # Prediction
     predictions = distances < threshold
+    total_time = time.time() - start_total
+
+    # Timing summary
+    mean_time_ms = np.mean(sample_times) * 1000
+    std_time_ms = np.std(sample_times) * 1000
+    print(f"Average processing time per window: {
+          mean_time_ms:.4f} ± {std_time_ms:.4f} ms")
 
     # Accuracy and confusion matrix
     acc = accuracy_score(ground_truth, predictions)
     cm = confusion_matrix(ground_truth, predictions)
+
     print("Confusion Matrix:")
     print(cm)
     print("\nClassification Report:")
     print(classification_report(ground_truth, predictions,
           target_names=['Anomaly', 'Normal']))
 
-    # Plot 1: Distance histogram with accuracy in title
-
-    plt.figure(figsize=(6, 4), dpi=200)
-    plt.hist(distances[ground_truth], bins=20, alpha=0.7,
+    # Plotting
+    plt.figure(figsize=(7, 4), dpi=200)
+    plt.hist(distances[ground_truth], bins=30, alpha=0.7,
              label='Normal (30 µm)', color='green')
-    plt.hist(distances[~ground_truth], bins=20,
+    plt.hist(distances[~ground_truth], bins=30,
              alpha=0.7, label='Anomaly', color='red')
-
-    threshold = 7.8
     plt.axvline(threshold, color='black', linestyle='--',
                 label=f'Threshold = {threshold:.2f}')
-    plt.xlabel('Distance to centroid (30 µm)', fontsize=14)
-    plt.ylabel('Number of windows', fontsize=14)
-    plt.title(
-        f"Distance distribution for anomaly detection \n"
-        f"(Window length {
-            1000 - epoch_length}) - Accuracy = {acc * 100:.2f}%",
-        fontsize=14)
-
-    plt.xticks(fontsize=14)
-    plt.yticks(fontsize=14)
-    # plt.legend()
+    plt.xlabel('Distance to centroid (30 µm)')
+    plt.ylabel('Number of windows')
+    plt.title(f'Distance distribution (Window length {
+              1000 - epoch_length})\nAccuracy = {acc*100:.2f}%')
     plt.legend(loc='center left', bbox_to_anchor=(1.0, 0.5), frameon=True)
     plt.grid(False)
     plt.tight_layout()
     plt.savefig(os.path.join(folder_created,
-                f"Distance_histogram_Tsne_epoch_{epoch_length}.png"))
+                f"Distance_histogram_latent_epoch_{epoch_length}.png"))
     plt.show()
     plt.close()
 
@@ -124,5 +121,7 @@ def anomaly_detection_centroid(epoch_length, folder_created, filename, threshold
         "ground_truth": ground_truth,
         "confusion_matrix": cm,
         "accuracy": acc,
-        "threshold": threshold
+        "threshold": threshold,
+        "mean_time_ms": mean_time_ms,
+        "std_time_ms": std_time_ms
     }

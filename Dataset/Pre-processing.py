@@ -1,13 +1,15 @@
 # -*- coding: utf-8 -*-
 """
-Created on Wed Feb  7 21:57:22 2024
+@author: vpsora
+contact: vigneashwara.solairajapandiyan@utu.fi,vigneashpandiyan@gmail.com
 
-@author: srpv
-contact: vigneashwara.solairajapandiyan@empa.ch
 The codes in this following script will be used for the publication of the following work
-"Pyrometry-based in-situ Layer Thickness Identification via Vector-length Aware Self-Supervised Learning"
+"Adaptive In-situ Monitoring for Laser Powder Bed Fusion:Self-Supervised Learning for Layer Thickness Monitoring Across Scan lengths based on Pyrometry"
+
 @any reuse of this code should be authorized by the code author
 """
+# %%
+# Libraries to import
 
 import pickle
 import matplotlib.pyplot as plt
@@ -131,7 +133,8 @@ for folder_name in r:
         # sig = pd.read_csv(filename, delimiter=" ", dtype=np.int32)
 
         Trigger = sig.iloc[:, [8]]
-        reqd_Index = Trigger[Trigger["status"] >= 0.2].index.tolist()  # Threshold
+        reqd_Index = Trigger[Trigger["status"]
+                             >= 0.2].index.tolist()  # Threshold
         reqd_Index = np.array(reqd_Index)
 
         laser_on = consecutive(reqd_Index)

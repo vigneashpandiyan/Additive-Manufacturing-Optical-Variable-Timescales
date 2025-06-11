@@ -1,20 +1,13 @@
 # -*- coding: utf-8 -*-
 """
-Created on Wed Feb  7 21:57:22 2024
-
-@author: srpv
-contact: vigneashwara.solairajapandiyan@empa.ch
-
+@author: vpsora
+contact: vigneashwara.solairajapandiyan@utu.fi,vigneashpandiyan@gmail.com
 
 The codes in this following script will be used for the publication of the following work
+"Adaptive In-situ Monitoring for Laser Powder Bed Fusion:Self-Supervised Learning for Layer Thickness Monitoring Across Scan lengths based on Pyrometry"
 
-"Classification of Progressive Wear on a Multi-Directional Pin-on-Disc 
-Tribometer Simulating Conditions in Human Joints-UHMWPE against CoCrMo 
-Using Acoustic Emission and Machine Learning"
-
-@any reuse of this code should be authorized by the first owner, code author
+@any reuse of this code should be authorized by the code author
 """
-
 # %%
 # Libraries to import
 import numpy as np
@@ -40,13 +33,13 @@ def plot_roc(model, Featurespace, classspace, classes, Title1, Title2):
 
     # Add noisy features to make the problem harder
     random_state = np.random.RandomState(66)
-    #n_samples, n_features = Featurespace.shape
+    # n_samples, n_features = Featurespace.shape
 
     # shuffle and split training and test sets
     X_train, X_test, y_train, y_test = train_test_split(Featurespace, classspace, test_size=.25,
                                                         random_state=random_state)
 
-    #y_score = model.decision_function(X_test)
+    # y_score = model.decision_function(X_test)
     y_score = model.predict_proba(X_test)
 
     # print(y_score)
@@ -64,15 +57,18 @@ def plot_roc(model, Featurespace, classspace, classes, Title1, Title2):
         fpr[i], tpr[i], _ = roc_curve(y_test[:, i], y_score[:, i])
         roc_auc[i] = auc(fpr[i], tpr[i])
 
-        prec[i], recall[i], _ = precision_recall_curve(y_test[:, i], y_score[:, i])
-        average_precision[i] = average_precision_score(y_test[:, i], y_score[:, i])
+        prec[i], recall[i], _ = precision_recall_curve(
+            y_test[:, i], y_score[:, i])
+        average_precision[i] = average_precision_score(
+            y_test[:, i], y_score[:, i])
 
     lw = 2
 
     # Plot all ROC curves
 
     plt.figure(figsize=(8, 6), dpi=400)
-    colors = cycle(['red', 'darkorange', 'green', 'blue', 'yellow', 'purple', 'brown', 'orange'])
+    colors = cycle(['red', 'darkorange', 'green', 'blue',
+                   'yellow', 'purple', 'brown', 'orange'])
     for i, color in zip(range(n_classes), colors):
         plt.plot(fpr[i], tpr[i], color=color, lw=lw,
                  label='ROC curve of class {0} (area = {1:0.2f})'
@@ -91,7 +87,8 @@ def plot_roc(model, Featurespace, classspace, classes, Title1, Title2):
     # Plot all Precision-recall curves
 
     plt.figure(figsize=(8, 6), dpi=400)
-    colors = cycle(['red', 'darkorange', 'green', 'blue', 'yellow', 'purple', 'brown', 'orange'])
+    colors = cycle(['red', 'darkorange', 'green', 'blue',
+                   'yellow', 'purple', 'brown', 'orange'])
     for i, color in zip(range(n_classes), colors):
         plt.plot(recall[i], prec[i], color=color, lw=lw,
                  label='Precision-recall for class {0}  (area = {1:0.2f})'

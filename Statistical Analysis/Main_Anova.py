@@ -3,8 +3,15 @@
 Created on Sun Jun  8 22:17:37 2025
 
 @author: vpsora
+contact: vigneashwara.solairajapandiyan@utu.fi,vigneashpandiyan@gmail.com
+
+The codes in this following script will be used for the publication of the following work
+"Adaptive In-situ Monitoring for Laser Powder Bed Fusion:Self-Supervised Learning for Layer Thickness Monitoring Across Scan lengths based on Pyrometry"
+
+@any reuse of this code should be authorized by the code author
 """
 
+from statsmodels.stats.multicomp import pairwise_tukeyhsd
 import pandas as pd
 import scipy.stats as stats
 import statsmodels.api as sm
@@ -63,10 +70,10 @@ data_1 = pd.concat([data[data.Categorical == cat].head(minval)
 # print("Balanced dataset: ", data_1.Categorical.value_counts())
 
 Featurespace = data_1.iloc[:, :-1]
-Featurespace = (Featurespace[7]) #kutosis
+Featurespace = (Featurespace[7])  # kurtosis
 classspace = data_1.iloc[:, -1]
 
-#%%
+# %%
 
 # Ensure you're working with Series
 kurtosis_values = Featurespace
@@ -79,7 +86,8 @@ df_anova = pd.DataFrame({
 })
 
 # Group kurtosis values by class
-grouped_data = [group['kurtosis'].values for name, group in df_anova.groupby('class_label')]
+grouped_data = [group['kurtosis'].values for name,
+                group in df_anova.groupby('class_label')]
 
 # Perform one-way ANOVA
 f_stat, p_value = stats.f_oneway(*grouped_data)
@@ -87,19 +95,19 @@ f_stat, p_value = stats.f_oneway(*grouped_data)
 # Print results
 print("=== One-Way ANOVA on Kurtosis ===")
 print(f"F-statistic: {f_stat:.4f}")
-print(f"P-value:     {p_value:.4e}")
+print(f"P-value:     {p_value:.6e}")
 
 if p_value < 0.05:
     print("Result: Statistically significant differences across classes (p < 0.05).")
 else:
     print("Result: No statistically significant differences (p ≥ 0.05).")
-    
-#%%
 
-from statsmodels.stats.multicomp import pairwise_tukeyhsd
+# %%
+
 
 # Run Tukey HSD if ANOVA is significant
 if p_value < 0.05:
-    tukey = pairwise_tukeyhsd(endog=df_anova['kurtosis'], groups=df_anova['class_label'], alpha=0.05)
+    tukey = pairwise_tukeyhsd(
+        endog=df_anova['kurtosis'], groups=df_anova['class_label'], alpha=0.05)
     print("\n=== Tukey HSD Post-hoc Test ===")
     print(tukey)

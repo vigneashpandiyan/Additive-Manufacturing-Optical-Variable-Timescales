@@ -1,16 +1,15 @@
 # -*- coding: utf-8 -*-
 """
-Created on Mon Sep 23 23:25:55 2024
-@author: vigneashwara.p
-email: vigneashwara.pandiyan@tii.ae
+@author: vpsora
+contact: vigneashwara.solairajapandiyan@utu.fi,vigneashpandiyan@gmail.com
 
+The codes in this following script will be used for the publication of the following work
+"Adaptive In-situ Monitoring for Laser Powder Bed Fusion:Self-Supervised Learning for Layer Thickness Monitoring Across Scan lengths based on Pyrometry"
 
-_status_: "Prototyping"
-_maintainer_ = Vigneashwara Pandiyan
--made_with_ = AMRCWS14
-
-Modification and reuse of this code should be authorized by the first owner, code author(s) 
+@any reuse of this code should be authorized by the code author
 """
+# %%
+# Libraries to import
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -136,7 +135,3 @@ def Euclidean_2D(epoch_length, folder_created, filename):
     plt.savefig(os.path.join(folder_created, plot),
                 bbox_inches='tight', dpi=800)
     plt.show()
-
-
-
-    
