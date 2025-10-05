@@ -83,6 +83,7 @@ The dataset captures variable-length pyrometer emissions synchronized with the l
 ├── Main.py # Entry point for training & evaluation
 └── README.md 
 
+---
 
 ## 🧠 Results Summary
 
@@ -95,6 +96,7 @@ Discrimination between layers < 20 µm limited by pyrometer sensitivity; motivat
 
 Real-Time Feasibility:
 Inference latency < 1.5 ms on RTX Titan GPU — suitable for real-time LPBF control.
+---
 
 ## 🧬 Dataset Access
 
@@ -109,6 +111,7 @@ Deployment within real-time LPBF control loops.
 Extension to multi-material builds and geometry-aware signal encoding.
 
 Exploration of physics-informed learning and domain adaptation for cross-machine transfer.
+---
 
 ## 📚 Citation
 
