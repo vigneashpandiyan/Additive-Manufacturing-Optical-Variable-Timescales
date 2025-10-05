@@ -46,7 +46,7 @@ The methodology integrates **signal acquisition**, **temporal encoding**, and **
 4. **Inter-sample & Intra-temporal Heads** – Contrastive objectives linking augmented signal pairs and temporal segments.  
 5. **Inference & Visualization** – Latent embeddings analyzed with **t-SNE**, **centroid distances**, and **anomaly detection**.
 
-### 🖼️ Proposed Framework
+## 🖼️ Proposed Framework
 
 ![Proposed Methodology](Figures/Proposed methodology.jpg)
 
