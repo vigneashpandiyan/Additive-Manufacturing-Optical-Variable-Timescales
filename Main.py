@@ -20,13 +20,6 @@ import torch
 import seaborn as sns
 import matplotlib.pyplot as plt
 
-from Centroid_calculation.Utils_tSNE import tsne_visualization_
-from Centroid_calculation.Utils_Latent import *
-from Centroid_calculation.Utils_plotting import *
-from Centroid_calculation.Utils_centroid import *
-from Centroid_calculation.Utils_latent_centroid import *
-from Inference.Latency import *
-
 from Dataloader.Optical_dataset_loader import *
 from Trainer.Selftrain import encoder_backbone, count_parameters
 from Visualization.Temporal_latent_plots import latent_plots, plot_windows
@@ -34,6 +27,12 @@ from Visualization.tSNE import tsne_visualization
 from Evaluation.Backbone_evaluation import Encoder_backbone_evaluation
 from Model.Network import TemporalCNN
 from Parser. parser import parse_option
+
+from Centroid_calculation.Utils_tSNE import tsne_visualization_
+from Centroid_calculation.Utils_Latent import *
+from Centroid_calculation.Utils_plotting import *
+from Centroid_calculation.Utils_centroid import *
+
 
 # Checking the GPU availability
 print(torch.cuda.is_available())
@@ -58,7 +57,6 @@ window_size = 1000
 opt = parse_option()
 print(opt.class_type)
 
-
 # %%
 # Augmentation type
 aug1 = ['cutout']
@@ -76,7 +74,6 @@ print(opt.aug_type)
 
 filename = 'PhotodiodeD1'
 folder_created = os.path.join('Figures/', str(filename))
-
 try:
     os.makedirs(folder_created, exist_ok=True)
     print("Directory created....")
@@ -194,121 +191,3 @@ for epoch_length in window_lengths:
 
 for epoch_length in window_lengths:
     Euclidean_2D(epoch_length, folder_created, filename)
-
-# %%
-
-for epoch_length in window_lengths:
-    results = anomaly_detection_centroid(
-        epoch_length, folder_created, filename)
-
-# %% Inference
-filename_ = 'Preprocessed'
-folder_created_ = os.path.join('Figures/', str(filename_))
-
-try:
-    os.makedirs(folder_created_, exist_ok=True)
-    print("Directory created....")
-except OSError as error:
-    print("Directory already exists....")
-
-print(folder_created_)
-
-
-timing_results = []
-for epoch_length in window_lengths:
-
-    result = Inference_calc(x_train, y_train, x_val, y_val, x_test,
-                            y_test, ckpt, opt, folder_created_, str(filename), epoch_length)
-    train_embeddings, val_embeddings, test_embeddings, train_labelsname, val_labelsname, test_labelsname, timing_stats = result
-
-    print(f"Epoch Length {1000-epoch_length}:")
-    print(f"  Train Time: {timing_stats['train'][0]:.6f} ± {
-          timing_stats['train'][1]:.6f} sec/sample")
-    print(f"  Val   Time: {timing_stats['val'][0]:.6f} ± {
-          timing_stats['val'][1]:.6f} sec/sample")
-    print(f"  Test  Time: {timing_stats['test'][0]:.6f} ± {
-          timing_stats['test'][1]:.6f} sec/sample")
-
-    timing_results.append((1000-epoch_length, timing_stats))
-
-    epoch_lengths = [item[0] for item in timing_results]
-    train_means = np.array([item[1]['train'][0]
-                           for item in timing_results])   # convert to ms
-    val_means = np.array([item[1]['val'][0] for item in timing_results])
-    test_means = np.array([item[1]['test'][0] for item in timing_results])
-
-    train_stds = np.array([item[1]['train'][1] for item in timing_results])
-    val_stds = np.array([item[1]['val'][1] for item in timing_results])
-    test_stds = np.array([item[1]['test'][1] for item in timing_results])
-
-    # Bar width and positions
-    bar_width = 0.25
-    x = np.arange(len(epoch_lengths))
-
-    # Create the plot
-    plt.figure(figsize=(6, 4), dpi=200)
-    plt.bar(x - bar_width, train_means, yerr=train_stds,
-            width=bar_width, label='Train set', capsize=4)
-    plt.bar(x,              val_means,   yerr=val_stds,
-            width=bar_width, label='Validation set', capsize=4)
-    plt.bar(x + bar_width, test_means,  yerr=test_stds,
-            width=bar_width, label='Test set', capsize=4)
-
-    # Axis formatting
-    # epoch_lengths = 1000-epoch_lengths
-    plt.xticks(ticks=x, labels=epoch_lengths)
-    plt.xlabel("Window Length")
-    plt.ylabel("Processing time per sample (ms)")
-    plt.title("Per-sample inference time vs window Length")
-    plt.legend()
-    # plt.grid(axis='y', linestyle='--', alpha=0.7)
-    plt.tight_layout()
-    plt.savefig(os.path.join(folder_created_, f"distance_histogram_epoch.png"))
-    plt.show()
-
-# Lists to store results
-mean_times = []
-std_times = []
-
-# Loop through each epoch length and run the anomaly detection function
-for epoch_length in window_lengths:
-    print(f"\nRunning for epoch_length = {epoch_length}")
-    result = anomaly_detection_latent_centroid(
-        epoch_length=epoch_length,
-        folder_created=folder_created_,
-        filename=filename,
-        threshold=None,
-        ideal_label_value=30
-    )
-    mean_times.append(result['mean_time_ms'])
-    std_times.append(result['std_time_ms'])
-
-# Convert to numpy arrays
-mean_times = np.array(mean_times)
-std_times = np.array(std_times)
-
-# Ensure error bars don't go below zero
-neg_err = np.minimum(std_times, mean_times)  # Clip lower errors at zero
-pos_err = std_times                          # Keep upper errors as-is
-
-# Plot: Mean processing time per window with error bars
-window_lengths = [1000 - v for v in window_lengths]
-x = np.arange(len(window_lengths))
-bar_width = 0.5
-
-plt.figure(figsize=(8, 5))
-plt.bar(
-    x, mean_times,
-    yerr=[neg_err, pos_err],  # asymmetric error bars
-    capsize=6,
-    width=bar_width,
-    color='steelblue'
-)
-
-plt.xticks(ticks=x, labels=window_lengths)
-plt.xlabel("Epoch Length")
-plt.ylabel("Processing Time per Window (ms)")
-plt.title("Per-Window Anomaly Detection Time vs Epoch Length")
-plt.grid(axis='y', linestyle='--', alpha=0.6)
-plt.tight_layout()
-plt.show()
