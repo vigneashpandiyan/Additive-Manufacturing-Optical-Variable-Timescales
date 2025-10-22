@@ -117,10 +117,16 @@ Exploration of physics-informed learning and domain adaptation for cross-machine
 
 If you use this repository or data in your research, please cite:
 
-Kavas, B., Richter, R. A., Tucker, M. R., & Pandiyan, V. (2025).
-Adaptive In-Situ Monitoring for Laser Powder Bed Fusion: Self-Supervised Learning for Layer Thickness Monitoring Across Scan Lengths based on Pyrometry.
-University of Turku / Empa / ETH Zürich.
-DOI: 10.5281/zenodo.11101714
+Barış Kavas, Roland Axel Richter, Michael R. Tucker, Vigneashwara Pandiyan,
+Adaptive In-Situ monitoring for laser powder bed Fusion: Self-Supervised learning for layer thickness monitoring across scan lengths based on pyrometry,
+Optics & Laser Technology,
+Volume 192, Part F,
+2025,
+114070,
+ISSN 0030-3992,
+https://doi.org/10.1016/j.optlastec.2025.114070.
+(https://www.sciencedirect.com/science/article/pii/S0030399225016615)
+
 
 
 © 2025 Digital Manufacturing & Surface Engineering (DMS), University of Turku.
